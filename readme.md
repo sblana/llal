@@ -1,0 +1,1 @@
+inspired by tsoding's [la](https://github.com/tsoding/la) lib.
