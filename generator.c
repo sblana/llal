@@ -1,10 +1,30 @@
+/* TODO:
+- func: vec length
+- func: vec length squared
+- func: vec normalization
+- func: vec―matrix multiplication
+- func: matrix transpose
+- func: vec dot product
+- func: vec cross product
+- macro: matrix identity
+- macro: vec axis
+- macro: print format
+- constructors
+- conversion
+- rotation?
+- some kind of swizzling?
+- bool vectors?
+- quadruple?
+- function inlining?
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 
-#define GEN_VECNAME(name, T, N) char name[strlen(T)+1]; \
-								sprintf(name, "%s%zu", T, N);
+#define GEN_VECNAME(name, str, N) char name[strlen(str)+1]; \
+								sprintf(name, "%s%zu", str, N);
 
 enum FuncGenPassType {
 	DEFINITION = 0,
@@ -65,10 +85,40 @@ void gen_def_vector(FILE *stream, const char *type_name, size_t rows) {
 	fprintf(stream, "} %s%zu;\n\n", type_name, rows);
 }
 
+void gen_def_matrix(FILE *stream, const char *type_name, size_t rows) {
+	GEN_VECNAME(vec_name, type_name, rows)
+	
+	fprintf(stream,
+		"typedef union {\n"
+		"\t%s c[%zu];\n"
+		"\t%s v[%zu];\n",
+		type_name, rows*rows, vec_name, rows);
+	for (size_t k = 0; k < V_COMP_ALIAS_SETS; k++) {
+		fprintf(stream, 
+			"\tstruct { %s %c",
+			vec_name, vcomp_alias[k][0]);
+		for (size_t j = 1; j < rows; j++)
+			fprintf(stream, ", %c", vcomp_alias[k][j]);
+		fprintf(stream, "; };\n");
+		
+		fprintf(stream, 
+			"\tstruct {\n");
+		for (size_t j = 0; j < rows; j++) {
+			fprintf(stream,
+				"\t\t%s %c%c",
+				type_name, vcomp_alias[k][j], vcomp_alias[k][0]);
+			for (size_t i = 1; i < rows; i++)
+				fprintf(stream, ", %c%c", vcomp_alias[k][j], vcomp_alias[k][i]);
+			fprintf(stream, ";\n");
+		}
+		fprintf(stream, "\t};\n");
+	}
+	fprintf(stream, "} %sx%zu;\n\n", vec_name, rows);
+}
 
 void gen_func_vector_elementary(FILE *stream, struct type_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass) {
-	GEN_VECNAME(vec_name, type.name, rows);
-	GEN_VECNAME(vec_nickname, type.nickname, rows);
+	GEN_VECNAME(vec_name, type.name, rows)
+	GEN_VECNAME(vec_nickname, type.nickname, rows)
 	
 	fprintf(stream,
 		"%s %s_%s(%s a, %s b)",
@@ -102,16 +152,23 @@ void gen_func_vector_scalar_elementary(FILE *stream, struct type_info type, size
 
 
 int main() {
-	fprintf(stdout, "#ifndef LLAL_H\n\n");
-	fprintf(stdout, "#define LLAL_H\n\n");
-	fprintf(stdout, "#include <stdlib.h>\n\n");
-	fprintf(stdout, "\n");
-	fprintf(stdout, "typedef unsigned uint;\n");
+	fprintf(stdout,
+		"#ifndef LLAL_H\n"
+		"#define LLAL_H\n"
+		"\n"
+		"#include <stdlib.h>\n"
+		"\n"
+		"\n"
+		"typedef unsigned uint;\n");
 	for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 		fprintf(stdout, "\n");
-		for (size_t type = 0; type < TYPES_COUNT; type++) {
+		for (size_t type = 0; type < TYPES_COUNT; type++)
 			gen_def_vector(stdout, types[type].name, n);
-		}
+	}
+	for (size_t n = 2; n <= V_MAX_COMPS; n++) {
+		fprintf(stdout, "\n");
+		for (size_t type = 0; type < TYPES_COUNT; type++)
+			gen_def_matrix(stdout, types[type].name, n);
 	}
 	for (enum FuncGenPassType pass = DEFINITION; pass <= IMPLEMENTATION; pass++) {
 		if (pass == IMPLEMENTATION)
