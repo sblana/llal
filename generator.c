@@ -1,13 +1,17 @@
 /* TODO:
-- func: vec length
-- func: vec length squared
+- remove `typedef unsigned uint`
 - func: vec normalization
-- func: vec―matrix multiplication
-- func: matrix transpose
-- func: vec dot product
+- func: vec―mat multiplication
+- func: mat transpose
 - func: vec cross product
-- macro: matrix identity
-- macro: vec axis
+- func: vec clamp, scalar
+- func: vec min max, scalar
+- func: vec min max, scalar
+- func: vec floor, ceil
+- func: vec lerp, slerp
+- func: mat lerp, slerp
+- macro: mat identity constructor
+- macro: vec axis constructor
 - macro: print format
 - constructors
 - conversion
@@ -16,11 +20,13 @@
 - bool vectors?
 - quadruple?
 - function inlining?
+- integer matrices?
 */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 
 #define GEN_VECNAME(name, str, N) char name[strlen(str)+1]; \
@@ -150,6 +156,58 @@ void gen_func_vector_scalar_elementary(FILE *stream, struct type_info type, size
 			rows, operator.symbol);
 }
 
+void gen_func_vector_dot(FILE *stream, struct type_info type, size_t rows, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, type.name, rows)
+	GEN_VECNAME(vec_nickname, type.nickname, rows)
+	
+	fprintf(stream,
+		"%s %s_dot(%s a, %s b)",
+		type.name, vec_nickname, vec_name, vec_name);
+	if (pass == DEFINITION)
+		fprintf(stream, ";\n");
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n"
+				"\treturn a.x*b.x");
+		for (size_t j = 1; j < rows; j++)
+			fprintf(stream, " + a.%c*b.%c", vcomp_alias[0][j], vcomp_alias[0][j]);
+		fprintf(stream, ";\n}\n\n");
+	}
+}
+
+void gen_func_vector_lensqr(FILE *stream, struct type_info type, size_t rows, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, type.name, rows)
+	GEN_VECNAME(vec_nickname, type.nickname, rows)
+	
+	fprintf(stream,
+		"%s %s_lensqr(%s a)",
+		type.name, vec_nickname, vec_name);
+	if (pass == DEFINITION)
+		fprintf(stream, ";\n");
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn a.x*a.x");
+		for (size_t j = 1; j < rows; j++)
+			fprintf(stream, " + a.%c*a.%c", vcomp_alias[0][j], vcomp_alias[0][j]);
+		fprintf(stream, ";\n}\n\n");
+	}
+}
+
+void gen_func_vector_len(FILE *stream, struct type_info type, size_t rows, enum FuncGenPassType pass) {
+	if (abs(strcmp(type.name, "float")) && abs(strcmp(type.name, "double"))) return;
+	GEN_VECNAME(vec_name, type.name, rows)
+	GEN_VECNAME(vec_nickname, type.nickname, rows)
+	
+	fprintf(stream,
+		"%s %s_len(%s a)",
+		type.name, vec_nickname, vec_name);
+	if (pass == DEFINITION)
+		fprintf(stream, ";\n");
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn sqrt");
+		if (strcmp(type.name, "float") == 0)
+			fprintf(stream, "%c", 'f');
+		fprintf(stream, "(%s_lensqr(a));\n}\n\n", vec_nickname);
+	}
+}
 
 int main() {
 	fprintf(stdout,
@@ -157,6 +215,7 @@ int main() {
 		"#define LLAL_H\n"
 		"\n"
 		"#include <stdlib.h>\n"
+		"#include <math.h>\n"
 		"\n"
 		"\n"
 		"typedef unsigned uint;\n");
@@ -180,8 +239,13 @@ int main() {
 					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass);
 					gen_func_vector_scalar_elementary(stdout, types[type], n, operators[operator], pass);
 				}
+				gen_func_vector_dot(stdout, types[type], n, pass);
+				gen_func_vector_lensqr(stdout, types[type], n, pass);
+				gen_func_vector_len(stdout, types[type], n, pass);
 			}
 		}
+		// Matrix functions
+		// for (size_t n = 2; n <= V_MAX_COMPS; n++) {}
 		if (pass == DEFINITION)
 			fprintf(stdout, "\n");
 	}
