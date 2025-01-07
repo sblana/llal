@@ -2,6 +2,7 @@
 #define LLAL_H
 
 #include <stdlib.h>
+#include <math.h>
 
 
 typedef unsigned uint;
@@ -380,6 +381,9 @@ float2 f2_mul(float2 a, float2 b);
 float2 f2_mul_f(float2 a, float b);
 float2 f2_div(float2 a, float2 b);
 float2 f2_div_f(float2 a, float b);
+float f2_dot(float2 a, float2 b);
+float f2_lensqr(float2 a);
+float f2_len(float2 a);
 
 double2 d2_add(double2 a, double2 b);
 double2 d2_add_d(double2 a, double b);
@@ -389,6 +393,9 @@ double2 d2_mul(double2 a, double2 b);
 double2 d2_mul_d(double2 a, double b);
 double2 d2_div(double2 a, double2 b);
 double2 d2_div_d(double2 a, double b);
+double d2_dot(double2 a, double2 b);
+double d2_lensqr(double2 a);
+double d2_len(double2 a);
 
 int2 i2_add(int2 a, int2 b);
 int2 i2_add_i(int2 a, int b);
@@ -398,6 +405,8 @@ int2 i2_mul(int2 a, int2 b);
 int2 i2_mul_i(int2 a, int b);
 int2 i2_div(int2 a, int2 b);
 int2 i2_div_i(int2 a, int b);
+int i2_dot(int2 a, int2 b);
+int i2_lensqr(int2 a);
 
 uint2 u2_add(uint2 a, uint2 b);
 uint2 u2_add_u(uint2 a, uint b);
@@ -407,6 +416,8 @@ uint2 u2_mul(uint2 a, uint2 b);
 uint2 u2_mul_u(uint2 a, uint b);
 uint2 u2_div(uint2 a, uint2 b);
 uint2 u2_div_u(uint2 a, uint b);
+uint u2_dot(uint2 a, uint2 b);
+uint u2_lensqr(uint2 a);
 
 float3 f3_add(float3 a, float3 b);
 float3 f3_add_f(float3 a, float b);
@@ -416,6 +427,9 @@ float3 f3_mul(float3 a, float3 b);
 float3 f3_mul_f(float3 a, float b);
 float3 f3_div(float3 a, float3 b);
 float3 f3_div_f(float3 a, float b);
+float f3_dot(float3 a, float3 b);
+float f3_lensqr(float3 a);
+float f3_len(float3 a);
 
 double3 d3_add(double3 a, double3 b);
 double3 d3_add_d(double3 a, double b);
@@ -425,6 +439,9 @@ double3 d3_mul(double3 a, double3 b);
 double3 d3_mul_d(double3 a, double b);
 double3 d3_div(double3 a, double3 b);
 double3 d3_div_d(double3 a, double b);
+double d3_dot(double3 a, double3 b);
+double d3_lensqr(double3 a);
+double d3_len(double3 a);
 
 int3 i3_add(int3 a, int3 b);
 int3 i3_add_i(int3 a, int b);
@@ -434,6 +451,8 @@ int3 i3_mul(int3 a, int3 b);
 int3 i3_mul_i(int3 a, int b);
 int3 i3_div(int3 a, int3 b);
 int3 i3_div_i(int3 a, int b);
+int i3_dot(int3 a, int3 b);
+int i3_lensqr(int3 a);
 
 uint3 u3_add(uint3 a, uint3 b);
 uint3 u3_add_u(uint3 a, uint b);
@@ -443,6 +462,8 @@ uint3 u3_mul(uint3 a, uint3 b);
 uint3 u3_mul_u(uint3 a, uint b);
 uint3 u3_div(uint3 a, uint3 b);
 uint3 u3_div_u(uint3 a, uint b);
+uint u3_dot(uint3 a, uint3 b);
+uint u3_lensqr(uint3 a);
 
 float4 f4_add(float4 a, float4 b);
 float4 f4_add_f(float4 a, float b);
@@ -452,6 +473,9 @@ float4 f4_mul(float4 a, float4 b);
 float4 f4_mul_f(float4 a, float b);
 float4 f4_div(float4 a, float4 b);
 float4 f4_div_f(float4 a, float b);
+float f4_dot(float4 a, float4 b);
+float f4_lensqr(float4 a);
+float f4_len(float4 a);
 
 double4 d4_add(double4 a, double4 b);
 double4 d4_add_d(double4 a, double b);
@@ -461,6 +485,9 @@ double4 d4_mul(double4 a, double4 b);
 double4 d4_mul_d(double4 a, double b);
 double4 d4_div(double4 a, double4 b);
 double4 d4_div_d(double4 a, double b);
+double d4_dot(double4 a, double4 b);
+double d4_lensqr(double4 a);
+double d4_len(double4 a);
 
 int4 i4_add(int4 a, int4 b);
 int4 i4_add_i(int4 a, int b);
@@ -470,6 +497,8 @@ int4 i4_mul(int4 a, int4 b);
 int4 i4_mul_i(int4 a, int b);
 int4 i4_div(int4 a, int4 b);
 int4 i4_div_i(int4 a, int b);
+int i4_dot(int4 a, int4 b);
+int i4_lensqr(int4 a);
 
 uint4 u4_add(uint4 a, uint4 b);
 uint4 u4_add_u(uint4 a, uint b);
@@ -479,6 +508,8 @@ uint4 u4_mul(uint4 a, uint4 b);
 uint4 u4_mul_u(uint4 a, uint b);
 uint4 u4_div(uint4 a, uint4 b);
 uint4 u4_div_u(uint4 a, uint b);
+uint u4_dot(uint4 a, uint4 b);
+uint u4_lensqr(uint4 a);
 
 
 #ifdef LLAL_IMPLEMENTATION
@@ -523,6 +554,18 @@ float2 f2_div_f(float2 a, float b) {
 	return a;
 }
 
+float f2_dot(float2 a, float2 b) {
+	return a.x*b.x + a.y*b.y;
+}
+
+float f2_lensqr(float2 a) {
+	return a.x*a.x + a.y*a.y;
+}
+
+float f2_len(float2 a) {
+	return sqrtf(f2_lensqr(a));
+}
+
 
 double2 d2_add(double2 a, double2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
@@ -562,6 +605,18 @@ double2 d2_div(double2 a, double2 b) {
 double2 d2_div_d(double2 a, double b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] /= b;
 	return a;
+}
+
+double d2_dot(double2 a, double2 b) {
+	return a.x*b.x + a.y*b.y;
+}
+
+double d2_lensqr(double2 a) {
+	return a.x*a.x + a.y*a.y;
+}
+
+double d2_len(double2 a) {
+	return sqrt(d2_lensqr(a));
 }
 
 
@@ -605,6 +660,14 @@ int2 i2_div_i(int2 a, int b) {
 	return a;
 }
 
+int i2_dot(int2 a, int2 b) {
+	return a.x*b.x + a.y*b.y;
+}
+
+int i2_lensqr(int2 a) {
+	return a.x*a.x + a.y*a.y;
+}
+
 
 uint2 u2_add(uint2 a, uint2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
@@ -644,6 +707,14 @@ uint2 u2_div(uint2 a, uint2 b) {
 uint2 u2_div_u(uint2 a, uint b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] /= b;
 	return a;
+}
+
+uint u2_dot(uint2 a, uint2 b) {
+	return a.x*b.x + a.y*b.y;
+}
+
+uint u2_lensqr(uint2 a) {
+	return a.x*a.x + a.y*a.y;
 }
 
 
@@ -687,6 +758,18 @@ float3 f3_div_f(float3 a, float b) {
 	return a;
 }
 
+float f3_dot(float3 a, float3 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+float f3_lensqr(float3 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z;
+}
+
+float f3_len(float3 a) {
+	return sqrtf(f3_lensqr(a));
+}
+
 
 double3 d3_add(double3 a, double3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
@@ -726,6 +809,18 @@ double3 d3_div(double3 a, double3 b) {
 double3 d3_div_d(double3 a, double b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] /= b;
 	return a;
+}
+
+double d3_dot(double3 a, double3 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+double d3_lensqr(double3 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z;
+}
+
+double d3_len(double3 a) {
+	return sqrt(d3_lensqr(a));
 }
 
 
@@ -769,6 +864,14 @@ int3 i3_div_i(int3 a, int b) {
 	return a;
 }
 
+int i3_dot(int3 a, int3 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+int i3_lensqr(int3 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z;
+}
+
 
 uint3 u3_add(uint3 a, uint3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
@@ -808,6 +911,14 @@ uint3 u3_div(uint3 a, uint3 b) {
 uint3 u3_div_u(uint3 a, uint b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] /= b;
 	return a;
+}
+
+uint u3_dot(uint3 a, uint3 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+uint u3_lensqr(uint3 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z;
 }
 
 
@@ -851,6 +962,18 @@ float4 f4_div_f(float4 a, float b) {
 	return a;
 }
 
+float f4_dot(float4 a, float4 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+}
+
+float f4_lensqr(float4 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
+}
+
+float f4_len(float4 a) {
+	return sqrtf(f4_lensqr(a));
+}
+
 
 double4 d4_add(double4 a, double4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
@@ -890,6 +1013,18 @@ double4 d4_div(double4 a, double4 b) {
 double4 d4_div_d(double4 a, double b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] /= b;
 	return a;
+}
+
+double d4_dot(double4 a, double4 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+}
+
+double d4_lensqr(double4 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
+}
+
+double d4_len(double4 a) {
+	return sqrt(d4_lensqr(a));
 }
 
 
@@ -933,6 +1068,14 @@ int4 i4_div_i(int4 a, int b) {
 	return a;
 }
 
+int i4_dot(int4 a, int4 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+}
+
+int i4_lensqr(int4 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
+}
+
 
 uint4 u4_add(uint4 a, uint4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
@@ -972,6 +1115,14 @@ uint4 u4_div(uint4 a, uint4 b) {
 uint4 u4_div_u(uint4 a, uint b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] /= b;
 	return a;
+}
+
+uint u4_dot(uint4 a, uint4 b) {
+	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+}
+
+uint u4_lensqr(uint4 a) {
+	return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
 }
 
 #endif // ifdef LLAL_IMPLEMENTATION
