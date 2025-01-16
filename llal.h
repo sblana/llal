@@ -513,6 +513,30 @@ unsigned4 u4_div_u(unsigned4 a, unsigned b);
 unsigned u4_dot(unsigned4 a, unsigned4 b);
 unsigned u4_lensqr(unsigned4 a);
 
+float2x2 f2x2_transpose(float2x2 a);
+
+double2x2 d2x2_transpose(double2x2 a);
+
+int2x2 i2x2_transpose(int2x2 a);
+
+unsigned2x2 u2x2_transpose(unsigned2x2 a);
+
+float3x3 f3x3_transpose(float3x3 a);
+
+double3x3 d3x3_transpose(double3x3 a);
+
+int3x3 i3x3_transpose(int3x3 a);
+
+unsigned3x3 u3x3_transpose(unsigned3x3 a);
+
+float4x4 f4x4_transpose(float4x4 a);
+
+double4x4 d4x4_transpose(double4x4 a);
+
+int4x4 i4x4_transpose(int4x4 a);
+
+unsigned4x4 u4x4_transpose(unsigned4x4 a);
+
 
 #ifdef LLAL_IMPLEMENTATION
 
@@ -1149,6 +1173,114 @@ unsigned u4_dot(unsigned4 a, unsigned4 b) {
 
 unsigned u4_lensqr(unsigned4 a) {
 	return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
+}
+
+
+float2x2 f2x2_transpose(float2x2 a) {
+	return (float2x2){
+		.x = {{ a.xx, a.yx, }},
+		.y = {{ a.xy, a.yy, }},
+	};
+}
+
+
+double2x2 d2x2_transpose(double2x2 a) {
+	return (double2x2){
+		.x = {{ a.xx, a.yx, }},
+		.y = {{ a.xy, a.yy, }},
+	};
+}
+
+
+int2x2 i2x2_transpose(int2x2 a) {
+	return (int2x2){
+		.x = {{ a.xx, a.yx, }},
+		.y = {{ a.xy, a.yy, }},
+	};
+}
+
+
+unsigned2x2 u2x2_transpose(unsigned2x2 a) {
+	return (unsigned2x2){
+		.x = {{ a.xx, a.yx, }},
+		.y = {{ a.xy, a.yy, }},
+	};
+}
+
+
+float3x3 f3x3_transpose(float3x3 a) {
+	return (float3x3){
+		.x = {{ a.xx, a.yx, a.zx, }},
+		.y = {{ a.xy, a.yy, a.zy, }},
+		.z = {{ a.xz, a.yz, a.zz, }},
+	};
+}
+
+
+double3x3 d3x3_transpose(double3x3 a) {
+	return (double3x3){
+		.x = {{ a.xx, a.yx, a.zx, }},
+		.y = {{ a.xy, a.yy, a.zy, }},
+		.z = {{ a.xz, a.yz, a.zz, }},
+	};
+}
+
+
+int3x3 i3x3_transpose(int3x3 a) {
+	return (int3x3){
+		.x = {{ a.xx, a.yx, a.zx, }},
+		.y = {{ a.xy, a.yy, a.zy, }},
+		.z = {{ a.xz, a.yz, a.zz, }},
+	};
+}
+
+
+unsigned3x3 u3x3_transpose(unsigned3x3 a) {
+	return (unsigned3x3){
+		.x = {{ a.xx, a.yx, a.zx, }},
+		.y = {{ a.xy, a.yy, a.zy, }},
+		.z = {{ a.xz, a.yz, a.zz, }},
+	};
+}
+
+
+float4x4 f4x4_transpose(float4x4 a) {
+	return (float4x4){
+		.x = {{ a.xx, a.yx, a.zx, a.wx, }},
+		.y = {{ a.xy, a.yy, a.zy, a.wy, }},
+		.z = {{ a.xz, a.yz, a.zz, a.wz, }},
+		.w = {{ a.xw, a.yw, a.zw, a.ww, }},
+	};
+}
+
+
+double4x4 d4x4_transpose(double4x4 a) {
+	return (double4x4){
+		.x = {{ a.xx, a.yx, a.zx, a.wx, }},
+		.y = {{ a.xy, a.yy, a.zy, a.wy, }},
+		.z = {{ a.xz, a.yz, a.zz, a.wz, }},
+		.w = {{ a.xw, a.yw, a.zw, a.ww, }},
+	};
+}
+
+
+int4x4 i4x4_transpose(int4x4 a) {
+	return (int4x4){
+		.x = {{ a.xx, a.yx, a.zx, a.wx, }},
+		.y = {{ a.xy, a.yy, a.zy, a.wy, }},
+		.z = {{ a.xz, a.yz, a.zz, a.wz, }},
+		.w = {{ a.xw, a.yw, a.zw, a.ww, }},
+	};
+}
+
+
+unsigned4x4 u4x4_transpose(unsigned4x4 a) {
+	return (unsigned4x4){
+		.x = {{ a.xx, a.yx, a.zx, a.wx, }},
+		.y = {{ a.xy, a.yy, a.zy, a.wy, }},
+		.z = {{ a.xz, a.yz, a.zz, a.wz, }},
+		.w = {{ a.xw, a.yw, a.zw, a.ww, }},
+	};
 }
 
 #endif // ifdef LLAL_IMPLEMENTATION
