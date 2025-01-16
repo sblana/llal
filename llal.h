@@ -5,7 +5,6 @@
 #include <math.h>
 
 
-typedef unsigned uint;
 
 typedef union {
 	float c[2];
@@ -29,11 +28,11 @@ typedef union {
 } int2;
 
 typedef union {
-	uint c[2];
-	struct { uint x, y; };
-	struct { uint r, g; };
-	struct { uint s, t; };
-} uint2;
+	unsigned c[2];
+	struct { unsigned x, y; };
+	struct { unsigned r, g; };
+	struct { unsigned s, t; };
+} unsigned2;
 
 
 typedef union {
@@ -58,11 +57,11 @@ typedef union {
 } int3;
 
 typedef union {
-	uint c[3];
-	struct { uint x, y, z; };
-	struct { uint r, g, b; };
-	struct { uint s, t, p; };
-} uint3;
+	unsigned c[3];
+	struct { unsigned x, y, z; };
+	struct { unsigned r, g, b; };
+	struct { unsigned s, t, p; };
+} unsigned3;
 
 
 typedef union {
@@ -87,11 +86,11 @@ typedef union {
 } int4;
 
 typedef union {
-	uint c[4];
-	struct { uint x, y, z, w; };
-	struct { uint r, g, b, a; };
-	struct { uint s, t, p, q; };
-} uint4;
+	unsigned c[4];
+	struct { unsigned x, y, z, w; };
+	struct { unsigned r, g, b, a; };
+	struct { unsigned s, t, p, q; };
+} unsigned4;
 
 
 typedef union {
@@ -155,24 +154,24 @@ typedef union {
 } int2x2;
 
 typedef union {
-	uint c[4];
-	uint2 v[2];
-	struct { uint2 x, y; };
+	unsigned c[4];
+	unsigned2 v[2];
+	struct { unsigned2 x, y; };
 	struct {
-		uint xx, xy;
-		uint yx, yy;
+		unsigned xx, xy;
+		unsigned yx, yy;
 	};
-	struct { uint2 r, g; };
+	struct { unsigned2 r, g; };
 	struct {
-		uint rr, rg;
-		uint gr, gg;
+		unsigned rr, rg;
+		unsigned gr, gg;
 	};
-	struct { uint2 s, t; };
+	struct { unsigned2 s, t; };
 	struct {
-		uint ss, st;
-		uint ts, tt;
+		unsigned ss, st;
+		unsigned ts, tt;
 	};
-} uint2x2;
+} unsigned2x2;
 
 
 typedef union {
@@ -245,27 +244,27 @@ typedef union {
 } int3x3;
 
 typedef union {
-	uint c[9];
-	uint3 v[3];
-	struct { uint3 x, y, z; };
+	unsigned c[9];
+	unsigned3 v[3];
+	struct { unsigned3 x, y, z; };
 	struct {
-		uint xx, xy, xz;
-		uint yx, yy, yz;
-		uint zx, zy, zz;
+		unsigned xx, xy, xz;
+		unsigned yx, yy, yz;
+		unsigned zx, zy, zz;
 	};
-	struct { uint3 r, g, b; };
+	struct { unsigned3 r, g, b; };
 	struct {
-		uint rr, rg, rb;
-		uint gr, gg, gb;
-		uint br, bg, bb;
+		unsigned rr, rg, rb;
+		unsigned gr, gg, gb;
+		unsigned br, bg, bb;
 	};
-	struct { uint3 s, t, p; };
+	struct { unsigned3 s, t, p; };
 	struct {
-		uint ss, st, sp;
-		uint ts, tt, tp;
-		uint ps, pt, pp;
+		unsigned ss, st, sp;
+		unsigned ts, tt, tp;
+		unsigned ps, pt, pp;
 	};
-} uint3x3;
+} unsigned3x3;
 
 
 typedef union {
@@ -347,30 +346,30 @@ typedef union {
 } int4x4;
 
 typedef union {
-	uint c[16];
-	uint4 v[4];
-	struct { uint4 x, y, z, w; };
+	unsigned c[16];
+	unsigned4 v[4];
+	struct { unsigned4 x, y, z, w; };
 	struct {
-		uint xx, xy, xz, xw;
-		uint yx, yy, yz, yw;
-		uint zx, zy, zz, zw;
-		uint wx, wy, wz, ww;
+		unsigned xx, xy, xz, xw;
+		unsigned yx, yy, yz, yw;
+		unsigned zx, zy, zz, zw;
+		unsigned wx, wy, wz, ww;
 	};
-	struct { uint4 r, g, b, a; };
+	struct { unsigned4 r, g, b, a; };
 	struct {
-		uint rr, rg, rb, ra;
-		uint gr, gg, gb, ga;
-		uint br, bg, bb, ba;
-		uint ar, ag, ab, aa;
+		unsigned rr, rg, rb, ra;
+		unsigned gr, gg, gb, ga;
+		unsigned br, bg, bb, ba;
+		unsigned ar, ag, ab, aa;
 	};
-	struct { uint4 s, t, p, q; };
+	struct { unsigned4 s, t, p, q; };
 	struct {
-		uint ss, st, sp, sq;
-		uint ts, tt, tp, tq;
-		uint ps, pt, pp, pq;
-		uint qs, qt, qp, qq;
+		unsigned ss, st, sp, sq;
+		unsigned ts, tt, tp, tq;
+		unsigned ps, pt, pp, pq;
+		unsigned qs, qt, qp, qq;
 	};
-} uint4x4;
+} unsigned4x4;
 
 
 float2 f2_add(float2 a, float2 b);
@@ -408,16 +407,16 @@ int2 i2_div_i(int2 a, int b);
 int i2_dot(int2 a, int2 b);
 int i2_lensqr(int2 a);
 
-uint2 u2_add(uint2 a, uint2 b);
-uint2 u2_add_u(uint2 a, uint b);
-uint2 u2_sub(uint2 a, uint2 b);
-uint2 u2_sub_u(uint2 a, uint b);
-uint2 u2_mul(uint2 a, uint2 b);
-uint2 u2_mul_u(uint2 a, uint b);
-uint2 u2_div(uint2 a, uint2 b);
-uint2 u2_div_u(uint2 a, uint b);
-uint u2_dot(uint2 a, uint2 b);
-uint u2_lensqr(uint2 a);
+unsigned2 u2_add(unsigned2 a, unsigned2 b);
+unsigned2 u2_add_u(unsigned2 a, unsigned b);
+unsigned2 u2_sub(unsigned2 a, unsigned2 b);
+unsigned2 u2_sub_u(unsigned2 a, unsigned b);
+unsigned2 u2_mul(unsigned2 a, unsigned2 b);
+unsigned2 u2_mul_u(unsigned2 a, unsigned b);
+unsigned2 u2_div(unsigned2 a, unsigned2 b);
+unsigned2 u2_div_u(unsigned2 a, unsigned b);
+unsigned u2_dot(unsigned2 a, unsigned2 b);
+unsigned u2_lensqr(unsigned2 a);
 
 float3 f3_add(float3 a, float3 b);
 float3 f3_add_f(float3 a, float b);
@@ -428,6 +427,7 @@ float3 f3_mul_f(float3 a, float b);
 float3 f3_div(float3 a, float3 b);
 float3 f3_div_f(float3 a, float b);
 float f3_dot(float3 a, float3 b);
+float3 f3_cross(float3 a, float3 b);
 float f3_lensqr(float3 a);
 float f3_len(float3 a);
 
@@ -440,6 +440,7 @@ double3 d3_mul_d(double3 a, double b);
 double3 d3_div(double3 a, double3 b);
 double3 d3_div_d(double3 a, double b);
 double d3_dot(double3 a, double3 b);
+double3 d3_cross(double3 a, double3 b);
 double d3_lensqr(double3 a);
 double d3_len(double3 a);
 
@@ -452,18 +453,19 @@ int3 i3_mul_i(int3 a, int b);
 int3 i3_div(int3 a, int3 b);
 int3 i3_div_i(int3 a, int b);
 int i3_dot(int3 a, int3 b);
+int3 i3_cross(int3 a, int3 b);
 int i3_lensqr(int3 a);
 
-uint3 u3_add(uint3 a, uint3 b);
-uint3 u3_add_u(uint3 a, uint b);
-uint3 u3_sub(uint3 a, uint3 b);
-uint3 u3_sub_u(uint3 a, uint b);
-uint3 u3_mul(uint3 a, uint3 b);
-uint3 u3_mul_u(uint3 a, uint b);
-uint3 u3_div(uint3 a, uint3 b);
-uint3 u3_div_u(uint3 a, uint b);
-uint u3_dot(uint3 a, uint3 b);
-uint u3_lensqr(uint3 a);
+unsigned3 u3_add(unsigned3 a, unsigned3 b);
+unsigned3 u3_add_u(unsigned3 a, unsigned b);
+unsigned3 u3_sub(unsigned3 a, unsigned3 b);
+unsigned3 u3_sub_u(unsigned3 a, unsigned b);
+unsigned3 u3_mul(unsigned3 a, unsigned3 b);
+unsigned3 u3_mul_u(unsigned3 a, unsigned b);
+unsigned3 u3_div(unsigned3 a, unsigned3 b);
+unsigned3 u3_div_u(unsigned3 a, unsigned b);
+unsigned u3_dot(unsigned3 a, unsigned3 b);
+unsigned u3_lensqr(unsigned3 a);
 
 float4 f4_add(float4 a, float4 b);
 float4 f4_add_f(float4 a, float b);
@@ -500,16 +502,16 @@ int4 i4_div_i(int4 a, int b);
 int i4_dot(int4 a, int4 b);
 int i4_lensqr(int4 a);
 
-uint4 u4_add(uint4 a, uint4 b);
-uint4 u4_add_u(uint4 a, uint b);
-uint4 u4_sub(uint4 a, uint4 b);
-uint4 u4_sub_u(uint4 a, uint b);
-uint4 u4_mul(uint4 a, uint4 b);
-uint4 u4_mul_u(uint4 a, uint b);
-uint4 u4_div(uint4 a, uint4 b);
-uint4 u4_div_u(uint4 a, uint b);
-uint u4_dot(uint4 a, uint4 b);
-uint u4_lensqr(uint4 a);
+unsigned4 u4_add(unsigned4 a, unsigned4 b);
+unsigned4 u4_add_u(unsigned4 a, unsigned b);
+unsigned4 u4_sub(unsigned4 a, unsigned4 b);
+unsigned4 u4_sub_u(unsigned4 a, unsigned b);
+unsigned4 u4_mul(unsigned4 a, unsigned4 b);
+unsigned4 u4_mul_u(unsigned4 a, unsigned b);
+unsigned4 u4_div(unsigned4 a, unsigned4 b);
+unsigned4 u4_div_u(unsigned4 a, unsigned b);
+unsigned u4_dot(unsigned4 a, unsigned4 b);
+unsigned u4_lensqr(unsigned4 a);
 
 
 #ifdef LLAL_IMPLEMENTATION
@@ -669,51 +671,51 @@ int i2_lensqr(int2 a) {
 }
 
 
-uint2 u2_add(uint2 a, uint2 b) {
+unsigned2 u2_add(unsigned2 a, unsigned2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
 	return a;
 }
 
-uint2 u2_add_u(uint2 a, uint b) {
+unsigned2 u2_add_u(unsigned2 a, unsigned b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b;
 	return a;
 }
 
-uint2 u2_sub(uint2 a, uint2 b) {
+unsigned2 u2_sub(unsigned2 a, unsigned2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] -= b.c[i];
 	return a;
 }
 
-uint2 u2_sub_u(uint2 a, uint b) {
+unsigned2 u2_sub_u(unsigned2 a, unsigned b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] -= b;
 	return a;
 }
 
-uint2 u2_mul(uint2 a, uint2 b) {
+unsigned2 u2_mul(unsigned2 a, unsigned2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] *= b.c[i];
 	return a;
 }
 
-uint2 u2_mul_u(uint2 a, uint b) {
+unsigned2 u2_mul_u(unsigned2 a, unsigned b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] *= b;
 	return a;
 }
 
-uint2 u2_div(uint2 a, uint2 b) {
+unsigned2 u2_div(unsigned2 a, unsigned2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] /= b.c[i];
 	return a;
 }
 
-uint2 u2_div_u(uint2 a, uint b) {
+unsigned2 u2_div_u(unsigned2 a, unsigned b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] /= b;
 	return a;
 }
 
-uint u2_dot(uint2 a, uint2 b) {
+unsigned u2_dot(unsigned2 a, unsigned2 b) {
 	return a.x*b.x + a.y*b.y;
 }
 
-uint u2_lensqr(uint2 a) {
+unsigned u2_lensqr(unsigned2 a) {
 	return a.x*a.x + a.y*a.y;
 }
 
@@ -760,6 +762,14 @@ float3 f3_div_f(float3 a, float b) {
 
 float f3_dot(float3 a, float3 b) {
 	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+float3 f3_cross(float3 a, float3 b) {
+	return (float3){
+		.x = a.y*b.z - a.z*b.y,
+		.y = a.z*b.x - a.x*b.z,
+		.z = a.x*b.y - a.y*b.x,
+	};
 }
 
 float f3_lensqr(float3 a) {
@@ -815,6 +825,14 @@ double d3_dot(double3 a, double3 b) {
 	return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
+double3 d3_cross(double3 a, double3 b) {
+	return (double3){
+		.x = a.y*b.z - a.z*b.y,
+		.y = a.z*b.x - a.x*b.z,
+		.z = a.x*b.y - a.y*b.x,
+	};
+}
+
 double d3_lensqr(double3 a) {
 	return a.x*a.x + a.y*a.y + a.z*a.z;
 }
@@ -868,56 +886,64 @@ int i3_dot(int3 a, int3 b) {
 	return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
+int3 i3_cross(int3 a, int3 b) {
+	return (int3){
+		.x = a.y*b.z - a.z*b.y,
+		.y = a.z*b.x - a.x*b.z,
+		.z = a.x*b.y - a.y*b.x,
+	};
+}
+
 int i3_lensqr(int3 a) {
 	return a.x*a.x + a.y*a.y + a.z*a.z;
 }
 
 
-uint3 u3_add(uint3 a, uint3 b) {
+unsigned3 u3_add(unsigned3 a, unsigned3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
 	return a;
 }
 
-uint3 u3_add_u(uint3 a, uint b) {
+unsigned3 u3_add_u(unsigned3 a, unsigned b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b;
 	return a;
 }
 
-uint3 u3_sub(uint3 a, uint3 b) {
+unsigned3 u3_sub(unsigned3 a, unsigned3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] -= b.c[i];
 	return a;
 }
 
-uint3 u3_sub_u(uint3 a, uint b) {
+unsigned3 u3_sub_u(unsigned3 a, unsigned b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] -= b;
 	return a;
 }
 
-uint3 u3_mul(uint3 a, uint3 b) {
+unsigned3 u3_mul(unsigned3 a, unsigned3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] *= b.c[i];
 	return a;
 }
 
-uint3 u3_mul_u(uint3 a, uint b) {
+unsigned3 u3_mul_u(unsigned3 a, unsigned b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] *= b;
 	return a;
 }
 
-uint3 u3_div(uint3 a, uint3 b) {
+unsigned3 u3_div(unsigned3 a, unsigned3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] /= b.c[i];
 	return a;
 }
 
-uint3 u3_div_u(uint3 a, uint b) {
+unsigned3 u3_div_u(unsigned3 a, unsigned b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] /= b;
 	return a;
 }
 
-uint u3_dot(uint3 a, uint3 b) {
+unsigned u3_dot(unsigned3 a, unsigned3 b) {
 	return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
-uint u3_lensqr(uint3 a) {
+unsigned u3_lensqr(unsigned3 a) {
 	return a.x*a.x + a.y*a.y + a.z*a.z;
 }
 
@@ -1077,51 +1103,51 @@ int i4_lensqr(int4 a) {
 }
 
 
-uint4 u4_add(uint4 a, uint4 b) {
+unsigned4 u4_add(unsigned4 a, unsigned4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
 	return a;
 }
 
-uint4 u4_add_u(uint4 a, uint b) {
+unsigned4 u4_add_u(unsigned4 a, unsigned b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b;
 	return a;
 }
 
-uint4 u4_sub(uint4 a, uint4 b) {
+unsigned4 u4_sub(unsigned4 a, unsigned4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] -= b.c[i];
 	return a;
 }
 
-uint4 u4_sub_u(uint4 a, uint b) {
+unsigned4 u4_sub_u(unsigned4 a, unsigned b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] -= b;
 	return a;
 }
 
-uint4 u4_mul(uint4 a, uint4 b) {
+unsigned4 u4_mul(unsigned4 a, unsigned4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] *= b.c[i];
 	return a;
 }
 
-uint4 u4_mul_u(uint4 a, uint b) {
+unsigned4 u4_mul_u(unsigned4 a, unsigned b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] *= b;
 	return a;
 }
 
-uint4 u4_div(uint4 a, uint4 b) {
+unsigned4 u4_div(unsigned4 a, unsigned4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] /= b.c[i];
 	return a;
 }
 
-uint4 u4_div_u(uint4 a, uint b) {
+unsigned4 u4_div_u(unsigned4 a, unsigned b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] /= b;
 	return a;
 }
 
-uint u4_dot(uint4 a, uint4 b) {
+unsigned u4_dot(unsigned4 a, unsigned4 b) {
 	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
 }
 
-uint u4_lensqr(uint4 a) {
+unsigned u4_lensqr(unsigned4 a) {
 	return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
 }
 
