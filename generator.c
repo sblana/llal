@@ -1,8 +1,6 @@
 /* TODO:
 - func: vec normalization
 - func: vec―mat multiplication
-- func: mat transpose
-- func: vec cross product
 - func: vec clamp, scalar
 - func: vec min max, scalar
 - func: vec min max, scalar
@@ -36,6 +34,10 @@
 #define GEN_VECNAME(name, str, N) char name[strlen(str)+2]; \
 								  sprintf(name, "%s%zu", str, N); \
 								  name[strlen(str)+1] = '\0';
+
+#define GEN_MATNAME(name, str, N) char name[strlen(str)+4]; \
+								  sprintf(name, "%s%zux%zu", str, N, N); \
+								  name[strlen(str)+3] = '\0';
 
 #define END_FUNCDEF(stream) if (pass == DEFINITION) fprintf(stream, ";\n");
 
@@ -108,6 +110,7 @@ enum SpecFunc {
 	SPECFUNC_LENGTH,
 	SPECFUNC_DOT_PRODUCT,
 	SPECFUNC_CROSS_PRODUCT,
+	SPECFUNC_TRANSPOSE,
 	SPECFUNCS_COUNT,
 };
 
@@ -176,6 +179,22 @@ const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 		.arity = 2,
 		.param_dims = { DIM_VECTOR, DIM_VECTOR, }
 	},
+	[SPECFUNC_TRANSPOSE] = {
+		.name = {
+			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
+			.func_root = "transpose",
+			.suffix = FUNC_AFFIX_NONE,
+		},
+		.valid_datatypes = {
+			[DATATYPE_FLOAT]	= true,
+			[DATATYPE_DOUBLE]	= true,
+			[DATATYPE_INT]		= true,
+			[DATATYPE_UNSIGNED] = true,
+		},
+		.return_dim = DIM_MATRIX,
+		.arity = 1,
+		.param_dims = { DIM_MATRIX, }
+	},
 };
 
 const char *parameter_name_sets[][FUNC_MAX_ARITY] = {
@@ -213,10 +232,15 @@ size_t vsngen_func_symbol(char *buffer, size_t buffer_size, struct func_info fun
 					size_t p0_rows = va_arg(aq, size_t);
 					va_end(aq);
 					
-					GEN_VECNAME(vec_nickname, types[p0_type].nickname, p0_rows)
-					
-					snprintf(buffer + name_length, buffer_size - name_length, !i ? "%s_" : "_%s", vec_nickname);
-					name_length += strlen(vec_nickname) + 1;
+					GEN_MATNAME(p0_nickname, types[p0_type].nickname, p0_rows)
+					if (func.param_dims[0] == DIM_SCALAR) {
+						p0_nickname[strlen(p0_nickname)-3] = '\0';
+					}
+					else if (func.param_dims[0] == DIM_VECTOR) {
+						p0_nickname[strlen(p0_nickname)-2] = '\0';
+					}
+					snprintf(buffer + name_length, buffer_size - name_length, !i ? "%s_" : "_%s", p0_nickname);
+					name_length += strlen(p0_nickname) + 1;
 					if (buffer_size < name_length) return false;
 					buffer[name_length] = '\0';
 					break;
@@ -264,11 +288,16 @@ size_t sngen_func_signature(char *buffer, size_t buffer_size, struct func_info f
 		size_t r_rows = va_arg(args, size_t);
 		va_end(args);
 		
-		GEN_VECNAME(r_name, types[r_type].name, r_rows)
+		GEN_MATNAME(r_name, types[r_type].name, r_rows)
 		size_t r_name_length = strlen(r_name);
 		
 		if (func.return_dim == DIM_SCALAR) {
-			r_name_length--;
+			r_name_length -= 3;
+			r_name[r_name_length] = '\0';
+		}
+		
+		if (func.return_dim == DIM_VECTOR) {
+			r_name_length -= 2;
 			r_name[r_name_length] = '\0';
 		}
 		
@@ -301,12 +330,12 @@ size_t sngen_func_signature(char *buffer, size_t buffer_size, struct func_info f
 		}
 		va_end(args);
 		
-		GEN_VECNAME(p_name, types[p_type].name, p_rows)
+		GEN_MATNAME(p_name, types[p_type].name, p_rows)
 		if (func.param_dims[i] == DIM_SCALAR) {
-			p_name[strlen(p_name)-1] = '\0';
+			p_name[strlen(p_name)-3] = '\0';
 		}
-		else if (func.param_dims[i] == DIM_MATRIX) {
-			/* TODO: implement */
+		else if (func.param_dims[i] == DIM_VECTOR) {
+			p_name[strlen(p_name)-2] = '\0';
 		}
 		snprintf(buffer + signature_length, buffer_size - signature_length, "%s %s, ", p_name, parameter_name_sets[0][i]);
 		signature_length += strlen(p_name) + strlen(parameter_name_sets[0][i]) + 3;
@@ -477,6 +506,28 @@ void gen_func_vector_len(FILE *stream, enum DataType type, size_t rows, enum Fun
 	}
 }
 
+void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	if (specfuncs[SPECFUNC_TRANSPOSE].valid_datatypes[type] == false) return;
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	char func_sig[128];
+	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_TRANSPOSE], type, rows, type, rows);
+	
+	fprintf(stream, "%s", func_sig);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn (%s){", mat_name);
+		for (size_t j = 0; j < rows; j++) {
+			fprintf(stream, "\n\t\t.%c = {{", vcomp_alias[0][j]);
+			for (size_t i = 0; i < rows; i++) {
+				fprintf(stream, " a.%c%c,", vcomp_alias[0][i], vcomp_alias[0][j]);
+			}
+			fprintf(stream, " }},");
+		}
+		fprintf(stream, "\n\t};\n}\n\n");
+	}
+}
+
 int main() {
 	fprintf(stdout,
 		"#ifndef LLAL_H\n"
@@ -513,7 +564,12 @@ int main() {
 			}
 		}
 		// Matrix functions
-		// for (size_t n = 2; n <= V_MAX_COMPS; n++) {}
+		for (size_t n = 2; n <= V_MAX_COMPS; n++) {
+			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
+				fprintf(stdout, "\n");
+				gen_func_matrix_transpose(stdout, type, n, pass);
+			}
+		}
 		if (pass == DEFINITION)
 			fprintf(stdout, "\n");
 	}
