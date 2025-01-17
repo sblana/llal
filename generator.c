@@ -402,6 +402,79 @@ void gen_def_matrix(FILE *stream, const char *type_name, size_t rows) {
 	fprintf(stream, "} %sx%zu;\n\n", vec_name, rows);
 }
 
+// wrap this?
+void gen_ctor_vector(FILE *stream, struct datatype_info type, size_t rows, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, type.name, rows)
+	GEN_VECNAME(vec_nickname, type.nickname, rows)
+	char vecrow_names[rows][strlen(vec_name) + 1];
+	char vecrow_nicknames[rows][strlen(vec_nickname) + 1];
+	for (size_t i = 0; i < rows; i++) {
+		strcpy(vecrow_names[i], vec_name);
+		strcpy(vecrow_nicknames[i], vec_nickname);
+		vecrow_names[i][strlen(vec_name) - 1] = (i == 0) ? '\0' : '1' + i;
+		vecrow_nicknames[i][strlen(vec_nickname) - 1] = (i == 0) ? '\0' : '1' + i;
+	}
+	for (int arity = 1; (size_t)arity <= rows; arity++) {
+		for (int i = 0; i < pow(rows, arity); i++) {
+			// generate potential constructors
+			int param_rows[arity];
+			int temp = i;
+			size_t sum = 0;
+			for (int j = 0; j < arity; j++) {
+				param_rows[j] = (temp % rows) + 1;
+				sum += param_rows[j];
+				temp /= rows;
+			}
+			
+			// discard invalid constructors
+			if (sum != 1 && sum != rows) continue;
+			
+			// generate parameter names
+			char param_names[arity][5];
+			int comps_remaining = rows;
+			for (int param = 0; param < arity; param++) {
+				for (int j = 0; j < param_rows[param]; j++) {
+					param_names[param][j] = vcomp_alias[0][rows - comps_remaining];
+					comps_remaining--;
+				}
+				param_names[param][param_rows[param]] = '\0';
+			}
+			
+			// writing return type and func symbol
+			fprintf(stream, "%s %s_ctor_",
+				vec_name, vec_nickname);
+			for (int param = 0; param < arity; param++) {
+				fprintf(stream, "%s", vecrow_nicknames[param_rows[param]-1]);
+			}
+			// writing parameters
+			fprintf(stream, "(");
+			for (int param = 0; param < arity; param++) {
+				fprintf(stream, "%s %s",
+					vecrow_names[param_rows[param]-1], param_names[param]);
+				if (param < (arity - 1)) fprintf(stream, ", ");
+			}
+			fprintf(stream, ")");
+			
+			END_FUNCDEF(stream)
+			else if (pass == IMPLEMENTATION) {
+				fprintf(stream, "{\n\treturn (%s){{", vec_name);
+				comps_remaining = rows;
+				for (int param = 0; param < arity; param++) {
+					for (int j = 0; j < param_rows[param]; j++) {
+						fprintf(stream, " %s", param_names[param]);
+						if (param_rows[param] > 1)
+							fprintf(stream, ".%c", vcomp_alias[0][j]);
+						if (comps_remaining > 1)
+							fprintf(stream, ",");
+						comps_remaining--;
+					}
+				}
+				fprintf(stream, " }};\n}\n\n");
+			}
+		}
+	}
+}
+
 void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass) {
 	GEN_VECNAME(vec_name, type.name, rows)
 	GEN_VECNAME(vec_nickname, type.nickname, rows)
@@ -583,6 +656,7 @@ int main() {
 		for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
 				fprintf(stdout, "\n");
+				gen_ctor_vector(stdout, types[type], n, pass);
 				for (size_t operator = 0; operator < OPERATORS_COUNT; operator++) {
 					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass);
 					gen_func_vector_scalar_elementary(stdout, types[type], n, operators[operator], pass);
