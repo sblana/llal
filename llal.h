@@ -5,7 +5,6 @@
 #include <math.h>
 
 
-
 typedef union {
 	float c[2];
 	struct { float x, y; };
@@ -372,6 +371,9 @@ typedef union {
 } unsigned4x4;
 
 
+float2 f2_ctor_f(float x);
+float2 f2_ctor_f2(float2 xy);
+float2 f2_ctor_ff(float x, float y);
 float2 f2_add(float2 a, float2 b);
 float2 f2_add_f(float2 a, float b);
 float2 f2_sub(float2 a, float2 b);
@@ -383,7 +385,11 @@ float2 f2_div_f(float2 a, float b);
 float f2_dot(float2 a, float2 b);
 float f2_lensqr(float2 a);
 float f2_len(float2 a);
+float2 f2_normalize(float2 a);
 
+double2 d2_ctor_d(double x);
+double2 d2_ctor_d2(double2 xy);
+double2 d2_ctor_dd(double x, double y);
 double2 d2_add(double2 a, double2 b);
 double2 d2_add_d(double2 a, double b);
 double2 d2_sub(double2 a, double2 b);
@@ -395,7 +401,11 @@ double2 d2_div_d(double2 a, double b);
 double d2_dot(double2 a, double2 b);
 double d2_lensqr(double2 a);
 double d2_len(double2 a);
+double2 d2_normalize(double2 a);
 
+int2 i2_ctor_i(int x);
+int2 i2_ctor_i2(int2 xy);
+int2 i2_ctor_ii(int x, int y);
 int2 i2_add(int2 a, int2 b);
 int2 i2_add_i(int2 a, int b);
 int2 i2_sub(int2 a, int2 b);
@@ -407,6 +417,9 @@ int2 i2_div_i(int2 a, int b);
 int i2_dot(int2 a, int2 b);
 int i2_lensqr(int2 a);
 
+unsigned2 u2_ctor_u(unsigned x);
+unsigned2 u2_ctor_u2(unsigned2 xy);
+unsigned2 u2_ctor_uu(unsigned x, unsigned y);
 unsigned2 u2_add(unsigned2 a, unsigned2 b);
 unsigned2 u2_add_u(unsigned2 a, unsigned b);
 unsigned2 u2_sub(unsigned2 a, unsigned2 b);
@@ -418,6 +431,11 @@ unsigned2 u2_div_u(unsigned2 a, unsigned b);
 unsigned u2_dot(unsigned2 a, unsigned2 b);
 unsigned u2_lensqr(unsigned2 a);
 
+float3 f3_ctor_f(float x);
+float3 f3_ctor_f3(float3 xyz);
+float3 f3_ctor_f2f(float2 xy, float z);
+float3 f3_ctor_ff2(float x, float2 yz);
+float3 f3_ctor_fff(float x, float y, float z);
 float3 f3_add(float3 a, float3 b);
 float3 f3_add_f(float3 a, float b);
 float3 f3_sub(float3 a, float3 b);
@@ -430,7 +448,13 @@ float f3_dot(float3 a, float3 b);
 float3 f3_cross(float3 a, float3 b);
 float f3_lensqr(float3 a);
 float f3_len(float3 a);
+float3 f3_normalize(float3 a);
 
+double3 d3_ctor_d(double x);
+double3 d3_ctor_d3(double3 xyz);
+double3 d3_ctor_d2d(double2 xy, double z);
+double3 d3_ctor_dd2(double x, double2 yz);
+double3 d3_ctor_ddd(double x, double y, double z);
 double3 d3_add(double3 a, double3 b);
 double3 d3_add_d(double3 a, double b);
 double3 d3_sub(double3 a, double3 b);
@@ -443,7 +467,13 @@ double d3_dot(double3 a, double3 b);
 double3 d3_cross(double3 a, double3 b);
 double d3_lensqr(double3 a);
 double d3_len(double3 a);
+double3 d3_normalize(double3 a);
 
+int3 i3_ctor_i(int x);
+int3 i3_ctor_i3(int3 xyz);
+int3 i3_ctor_i2i(int2 xy, int z);
+int3 i3_ctor_ii2(int x, int2 yz);
+int3 i3_ctor_iii(int x, int y, int z);
 int3 i3_add(int3 a, int3 b);
 int3 i3_add_i(int3 a, int b);
 int3 i3_sub(int3 a, int3 b);
@@ -456,6 +486,11 @@ int i3_dot(int3 a, int3 b);
 int3 i3_cross(int3 a, int3 b);
 int i3_lensqr(int3 a);
 
+unsigned3 u3_ctor_u(unsigned x);
+unsigned3 u3_ctor_u3(unsigned3 xyz);
+unsigned3 u3_ctor_u2u(unsigned2 xy, unsigned z);
+unsigned3 u3_ctor_uu2(unsigned x, unsigned2 yz);
+unsigned3 u3_ctor_uuu(unsigned x, unsigned y, unsigned z);
 unsigned3 u3_add(unsigned3 a, unsigned3 b);
 unsigned3 u3_add_u(unsigned3 a, unsigned b);
 unsigned3 u3_sub(unsigned3 a, unsigned3 b);
@@ -467,6 +502,15 @@ unsigned3 u3_div_u(unsigned3 a, unsigned b);
 unsigned u3_dot(unsigned3 a, unsigned3 b);
 unsigned u3_lensqr(unsigned3 a);
 
+float4 f4_ctor_f(float x);
+float4 f4_ctor_f4(float4 xyzw);
+float4 f4_ctor_f3f(float3 xyz, float w);
+float4 f4_ctor_f2f2(float2 xy, float2 zw);
+float4 f4_ctor_ff3(float x, float3 yzw);
+float4 f4_ctor_f2ff(float2 xy, float z, float w);
+float4 f4_ctor_ff2f(float x, float2 yz, float w);
+float4 f4_ctor_fff2(float x, float y, float2 zw);
+float4 f4_ctor_ffff(float x, float y, float z, float w);
 float4 f4_add(float4 a, float4 b);
 float4 f4_add_f(float4 a, float b);
 float4 f4_sub(float4 a, float4 b);
@@ -478,7 +522,17 @@ float4 f4_div_f(float4 a, float b);
 float f4_dot(float4 a, float4 b);
 float f4_lensqr(float4 a);
 float f4_len(float4 a);
+float4 f4_normalize(float4 a);
 
+double4 d4_ctor_d(double x);
+double4 d4_ctor_d4(double4 xyzw);
+double4 d4_ctor_d3d(double3 xyz, double w);
+double4 d4_ctor_d2d2(double2 xy, double2 zw);
+double4 d4_ctor_dd3(double x, double3 yzw);
+double4 d4_ctor_d2dd(double2 xy, double z, double w);
+double4 d4_ctor_dd2d(double x, double2 yz, double w);
+double4 d4_ctor_ddd2(double x, double y, double2 zw);
+double4 d4_ctor_dddd(double x, double y, double z, double w);
 double4 d4_add(double4 a, double4 b);
 double4 d4_add_d(double4 a, double b);
 double4 d4_sub(double4 a, double4 b);
@@ -490,7 +544,17 @@ double4 d4_div_d(double4 a, double b);
 double d4_dot(double4 a, double4 b);
 double d4_lensqr(double4 a);
 double d4_len(double4 a);
+double4 d4_normalize(double4 a);
 
+int4 i4_ctor_i(int x);
+int4 i4_ctor_i4(int4 xyzw);
+int4 i4_ctor_i3i(int3 xyz, int w);
+int4 i4_ctor_i2i2(int2 xy, int2 zw);
+int4 i4_ctor_ii3(int x, int3 yzw);
+int4 i4_ctor_i2ii(int2 xy, int z, int w);
+int4 i4_ctor_ii2i(int x, int2 yz, int w);
+int4 i4_ctor_iii2(int x, int y, int2 zw);
+int4 i4_ctor_iiii(int x, int y, int z, int w);
 int4 i4_add(int4 a, int4 b);
 int4 i4_add_i(int4 a, int b);
 int4 i4_sub(int4 a, int4 b);
@@ -502,6 +566,15 @@ int4 i4_div_i(int4 a, int b);
 int i4_dot(int4 a, int4 b);
 int i4_lensqr(int4 a);
 
+unsigned4 u4_ctor_u(unsigned x);
+unsigned4 u4_ctor_u4(unsigned4 xyzw);
+unsigned4 u4_ctor_u3u(unsigned3 xyz, unsigned w);
+unsigned4 u4_ctor_u2u2(unsigned2 xy, unsigned2 zw);
+unsigned4 u4_ctor_uu3(unsigned x, unsigned3 yzw);
+unsigned4 u4_ctor_u2uu(unsigned2 xy, unsigned z, unsigned w);
+unsigned4 u4_ctor_uu2u(unsigned x, unsigned2 yz, unsigned w);
+unsigned4 u4_ctor_uuu2(unsigned x, unsigned y, unsigned2 zw);
+unsigned4 u4_ctor_uuuu(unsigned x, unsigned y, unsigned z, unsigned w);
 unsigned4 u4_add(unsigned4 a, unsigned4 b);
 unsigned4 u4_add_u(unsigned4 a, unsigned b);
 unsigned4 u4_sub(unsigned4 a, unsigned4 b);
@@ -513,32 +586,140 @@ unsigned4 u4_div_u(unsigned4 a, unsigned b);
 unsigned u4_dot(unsigned4 a, unsigned4 b);
 unsigned u4_lensqr(unsigned4 a);
 
+float2x2 f2x2_add_f(float2x2 a, float b);
+float2x2 f2x2_add_f2x2(float2x2 a, float2x2 b);
+float2x2 f2x2_sub_f(float2x2 a, float b);
+float2x2 f2x2_sub_f2x2(float2x2 a, float2x2 b);
+float2x2 f2x2_mul_f(float2x2 a, float b);
+float2x2 f2x2_mul_f2x2(float2x2 a, float2x2 b);
+float2x2 f2x2_div_f(float2x2 a, float b);
+float2x2 f2x2_div_f2x2(float2x2 a, float2x2 b);
 float2x2 f2x2_transpose(float2x2 a);
 
+double2x2 d2x2_add_d(double2x2 a, double b);
+double2x2 d2x2_add_d2x2(double2x2 a, double2x2 b);
+double2x2 d2x2_sub_d(double2x2 a, double b);
+double2x2 d2x2_sub_d2x2(double2x2 a, double2x2 b);
+double2x2 d2x2_mul_d(double2x2 a, double b);
+double2x2 d2x2_mul_d2x2(double2x2 a, double2x2 b);
+double2x2 d2x2_div_d(double2x2 a, double b);
+double2x2 d2x2_div_d2x2(double2x2 a, double2x2 b);
 double2x2 d2x2_transpose(double2x2 a);
 
+int2x2 i2x2_add_i(int2x2 a, int b);
+int2x2 i2x2_add_i2x2(int2x2 a, int2x2 b);
+int2x2 i2x2_sub_i(int2x2 a, int b);
+int2x2 i2x2_sub_i2x2(int2x2 a, int2x2 b);
+int2x2 i2x2_mul_i(int2x2 a, int b);
+int2x2 i2x2_mul_i2x2(int2x2 a, int2x2 b);
+int2x2 i2x2_div_i(int2x2 a, int b);
+int2x2 i2x2_div_i2x2(int2x2 a, int2x2 b);
 int2x2 i2x2_transpose(int2x2 a);
 
+unsigned2x2 u2x2_add_u(unsigned2x2 a, unsigned b);
+unsigned2x2 u2x2_add_u2x2(unsigned2x2 a, unsigned2x2 b);
+unsigned2x2 u2x2_sub_u(unsigned2x2 a, unsigned b);
+unsigned2x2 u2x2_sub_u2x2(unsigned2x2 a, unsigned2x2 b);
+unsigned2x2 u2x2_mul_u(unsigned2x2 a, unsigned b);
+unsigned2x2 u2x2_mul_u2x2(unsigned2x2 a, unsigned2x2 b);
+unsigned2x2 u2x2_div_u(unsigned2x2 a, unsigned b);
+unsigned2x2 u2x2_div_u2x2(unsigned2x2 a, unsigned2x2 b);
 unsigned2x2 u2x2_transpose(unsigned2x2 a);
 
+float3x3 f3x3_add_f(float3x3 a, float b);
+float3x3 f3x3_add_f3x3(float3x3 a, float3x3 b);
+float3x3 f3x3_sub_f(float3x3 a, float b);
+float3x3 f3x3_sub_f3x3(float3x3 a, float3x3 b);
+float3x3 f3x3_mul_f(float3x3 a, float b);
+float3x3 f3x3_mul_f3x3(float3x3 a, float3x3 b);
+float3x3 f3x3_div_f(float3x3 a, float b);
+float3x3 f3x3_div_f3x3(float3x3 a, float3x3 b);
 float3x3 f3x3_transpose(float3x3 a);
 
+double3x3 d3x3_add_d(double3x3 a, double b);
+double3x3 d3x3_add_d3x3(double3x3 a, double3x3 b);
+double3x3 d3x3_sub_d(double3x3 a, double b);
+double3x3 d3x3_sub_d3x3(double3x3 a, double3x3 b);
+double3x3 d3x3_mul_d(double3x3 a, double b);
+double3x3 d3x3_mul_d3x3(double3x3 a, double3x3 b);
+double3x3 d3x3_div_d(double3x3 a, double b);
+double3x3 d3x3_div_d3x3(double3x3 a, double3x3 b);
 double3x3 d3x3_transpose(double3x3 a);
 
+int3x3 i3x3_add_i(int3x3 a, int b);
+int3x3 i3x3_add_i3x3(int3x3 a, int3x3 b);
+int3x3 i3x3_sub_i(int3x3 a, int b);
+int3x3 i3x3_sub_i3x3(int3x3 a, int3x3 b);
+int3x3 i3x3_mul_i(int3x3 a, int b);
+int3x3 i3x3_mul_i3x3(int3x3 a, int3x3 b);
+int3x3 i3x3_div_i(int3x3 a, int b);
+int3x3 i3x3_div_i3x3(int3x3 a, int3x3 b);
 int3x3 i3x3_transpose(int3x3 a);
 
+unsigned3x3 u3x3_add_u(unsigned3x3 a, unsigned b);
+unsigned3x3 u3x3_add_u3x3(unsigned3x3 a, unsigned3x3 b);
+unsigned3x3 u3x3_sub_u(unsigned3x3 a, unsigned b);
+unsigned3x3 u3x3_sub_u3x3(unsigned3x3 a, unsigned3x3 b);
+unsigned3x3 u3x3_mul_u(unsigned3x3 a, unsigned b);
+unsigned3x3 u3x3_mul_u3x3(unsigned3x3 a, unsigned3x3 b);
+unsigned3x3 u3x3_div_u(unsigned3x3 a, unsigned b);
+unsigned3x3 u3x3_div_u3x3(unsigned3x3 a, unsigned3x3 b);
 unsigned3x3 u3x3_transpose(unsigned3x3 a);
 
+float4x4 f4x4_add_f(float4x4 a, float b);
+float4x4 f4x4_add_f4x4(float4x4 a, float4x4 b);
+float4x4 f4x4_sub_f(float4x4 a, float b);
+float4x4 f4x4_sub_f4x4(float4x4 a, float4x4 b);
+float4x4 f4x4_mul_f(float4x4 a, float b);
+float4x4 f4x4_mul_f4x4(float4x4 a, float4x4 b);
+float4x4 f4x4_div_f(float4x4 a, float b);
+float4x4 f4x4_div_f4x4(float4x4 a, float4x4 b);
 float4x4 f4x4_transpose(float4x4 a);
 
+double4x4 d4x4_add_d(double4x4 a, double b);
+double4x4 d4x4_add_d4x4(double4x4 a, double4x4 b);
+double4x4 d4x4_sub_d(double4x4 a, double b);
+double4x4 d4x4_sub_d4x4(double4x4 a, double4x4 b);
+double4x4 d4x4_mul_d(double4x4 a, double b);
+double4x4 d4x4_mul_d4x4(double4x4 a, double4x4 b);
+double4x4 d4x4_div_d(double4x4 a, double b);
+double4x4 d4x4_div_d4x4(double4x4 a, double4x4 b);
 double4x4 d4x4_transpose(double4x4 a);
 
+int4x4 i4x4_add_i(int4x4 a, int b);
+int4x4 i4x4_add_i4x4(int4x4 a, int4x4 b);
+int4x4 i4x4_sub_i(int4x4 a, int b);
+int4x4 i4x4_sub_i4x4(int4x4 a, int4x4 b);
+int4x4 i4x4_mul_i(int4x4 a, int b);
+int4x4 i4x4_mul_i4x4(int4x4 a, int4x4 b);
+int4x4 i4x4_div_i(int4x4 a, int b);
+int4x4 i4x4_div_i4x4(int4x4 a, int4x4 b);
 int4x4 i4x4_transpose(int4x4 a);
 
+unsigned4x4 u4x4_add_u(unsigned4x4 a, unsigned b);
+unsigned4x4 u4x4_add_u4x4(unsigned4x4 a, unsigned4x4 b);
+unsigned4x4 u4x4_sub_u(unsigned4x4 a, unsigned b);
+unsigned4x4 u4x4_sub_u4x4(unsigned4x4 a, unsigned4x4 b);
+unsigned4x4 u4x4_mul_u(unsigned4x4 a, unsigned b);
+unsigned4x4 u4x4_mul_u4x4(unsigned4x4 a, unsigned4x4 b);
+unsigned4x4 u4x4_div_u(unsigned4x4 a, unsigned b);
+unsigned4x4 u4x4_div_u4x4(unsigned4x4 a, unsigned4x4 b);
 unsigned4x4 u4x4_transpose(unsigned4x4 a);
 
 
 #ifdef LLAL_IMPLEMENTATION
+
+float2 f2_ctor_f(float x){
+	return (float2){{ x, }};
+}
+
+float2 f2_ctor_f2(float2 xy){
+	return (float2){{ xy.x, xy.y }};
+}
+
+float2 f2_ctor_ff(float x, float y){
+	return (float2){{ x, y }};
+}
 
 float2 f2_add(float2 a, float2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
@@ -592,6 +773,22 @@ float f2_len(float2 a) {
 	return sqrtf(f2_lensqr(a));
 }
 
+float2 f2_normalize(float2 a) {
+	return f2_div_f(a, f2_lensqr(a));
+}
+
+
+double2 d2_ctor_d(double x){
+	return (double2){{ x, }};
+}
+
+double2 d2_ctor_d2(double2 xy){
+	return (double2){{ xy.x, xy.y }};
+}
+
+double2 d2_ctor_dd(double x, double y){
+	return (double2){{ x, y }};
+}
 
 double2 d2_add(double2 a, double2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
@@ -645,6 +842,22 @@ double d2_len(double2 a) {
 	return sqrt(d2_lensqr(a));
 }
 
+double2 d2_normalize(double2 a) {
+	return d2_div_d(a, d2_lensqr(a));
+}
+
+
+int2 i2_ctor_i(int x){
+	return (int2){{ x, }};
+}
+
+int2 i2_ctor_i2(int2 xy){
+	return (int2){{ xy.x, xy.y }};
+}
+
+int2 i2_ctor_ii(int x, int y){
+	return (int2){{ x, y }};
+}
 
 int2 i2_add(int2 a, int2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
@@ -695,6 +908,18 @@ int i2_lensqr(int2 a) {
 }
 
 
+unsigned2 u2_ctor_u(unsigned x){
+	return (unsigned2){{ x, }};
+}
+
+unsigned2 u2_ctor_u2(unsigned2 xy){
+	return (unsigned2){{ xy.x, xy.y }};
+}
+
+unsigned2 u2_ctor_uu(unsigned x, unsigned y){
+	return (unsigned2){{ x, y }};
+}
+
 unsigned2 u2_add(unsigned2 a, unsigned2 b) {
 	for (size_t i = 0; i < 2; i++) a.c[i] += b.c[i];
 	return a;
@@ -743,6 +968,26 @@ unsigned u2_lensqr(unsigned2 a) {
 	return a.x*a.x + a.y*a.y;
 }
 
+
+float3 f3_ctor_f(float x){
+	return (float3){{ x, }};
+}
+
+float3 f3_ctor_f3(float3 xyz){
+	return (float3){{ xyz.x, xyz.y, xyz.z }};
+}
+
+float3 f3_ctor_f2f(float2 xy, float z){
+	return (float3){{ xy.x, xy.y, z }};
+}
+
+float3 f3_ctor_ff2(float x, float2 yz){
+	return (float3){{ x, yz.x, yz.y }};
+}
+
+float3 f3_ctor_fff(float x, float y, float z){
+	return (float3){{ x, y, z }};
+}
 
 float3 f3_add(float3 a, float3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
@@ -804,6 +1049,30 @@ float f3_len(float3 a) {
 	return sqrtf(f3_lensqr(a));
 }
 
+float3 f3_normalize(float3 a) {
+	return f3_div_f(a, f3_lensqr(a));
+}
+
+
+double3 d3_ctor_d(double x){
+	return (double3){{ x, }};
+}
+
+double3 d3_ctor_d3(double3 xyz){
+	return (double3){{ xyz.x, xyz.y, xyz.z }};
+}
+
+double3 d3_ctor_d2d(double2 xy, double z){
+	return (double3){{ xy.x, xy.y, z }};
+}
+
+double3 d3_ctor_dd2(double x, double2 yz){
+	return (double3){{ x, yz.x, yz.y }};
+}
+
+double3 d3_ctor_ddd(double x, double y, double z){
+	return (double3){{ x, y, z }};
+}
 
 double3 d3_add(double3 a, double3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
@@ -865,6 +1134,30 @@ double d3_len(double3 a) {
 	return sqrt(d3_lensqr(a));
 }
 
+double3 d3_normalize(double3 a) {
+	return d3_div_d(a, d3_lensqr(a));
+}
+
+
+int3 i3_ctor_i(int x){
+	return (int3){{ x, }};
+}
+
+int3 i3_ctor_i3(int3 xyz){
+	return (int3){{ xyz.x, xyz.y, xyz.z }};
+}
+
+int3 i3_ctor_i2i(int2 xy, int z){
+	return (int3){{ xy.x, xy.y, z }};
+}
+
+int3 i3_ctor_ii2(int x, int2 yz){
+	return (int3){{ x, yz.x, yz.y }};
+}
+
+int3 i3_ctor_iii(int x, int y, int z){
+	return (int3){{ x, y, z }};
+}
 
 int3 i3_add(int3 a, int3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
@@ -923,6 +1216,26 @@ int i3_lensqr(int3 a) {
 }
 
 
+unsigned3 u3_ctor_u(unsigned x){
+	return (unsigned3){{ x, }};
+}
+
+unsigned3 u3_ctor_u3(unsigned3 xyz){
+	return (unsigned3){{ xyz.x, xyz.y, xyz.z }};
+}
+
+unsigned3 u3_ctor_u2u(unsigned2 xy, unsigned z){
+	return (unsigned3){{ xy.x, xy.y, z }};
+}
+
+unsigned3 u3_ctor_uu2(unsigned x, unsigned2 yz){
+	return (unsigned3){{ x, yz.x, yz.y }};
+}
+
+unsigned3 u3_ctor_uuu(unsigned x, unsigned y, unsigned z){
+	return (unsigned3){{ x, y, z }};
+}
+
 unsigned3 u3_add(unsigned3 a, unsigned3 b) {
 	for (size_t i = 0; i < 3; i++) a.c[i] += b.c[i];
 	return a;
@@ -971,6 +1284,42 @@ unsigned u3_lensqr(unsigned3 a) {
 	return a.x*a.x + a.y*a.y + a.z*a.z;
 }
 
+
+float4 f4_ctor_f(float x){
+	return (float4){{ x, }};
+}
+
+float4 f4_ctor_f4(float4 xyzw){
+	return (float4){{ xyzw.x, xyzw.y, xyzw.z, xyzw.w }};
+}
+
+float4 f4_ctor_f3f(float3 xyz, float w){
+	return (float4){{ xyz.x, xyz.y, xyz.z, w }};
+}
+
+float4 f4_ctor_f2f2(float2 xy, float2 zw){
+	return (float4){{ xy.x, xy.y, zw.x, zw.y }};
+}
+
+float4 f4_ctor_ff3(float x, float3 yzw){
+	return (float4){{ x, yzw.x, yzw.y, yzw.z }};
+}
+
+float4 f4_ctor_f2ff(float2 xy, float z, float w){
+	return (float4){{ xy.x, xy.y, z, w }};
+}
+
+float4 f4_ctor_ff2f(float x, float2 yz, float w){
+	return (float4){{ x, yz.x, yz.y, w }};
+}
+
+float4 f4_ctor_fff2(float x, float y, float2 zw){
+	return (float4){{ x, y, zw.x, zw.y }};
+}
+
+float4 f4_ctor_ffff(float x, float y, float z, float w){
+	return (float4){{ x, y, z, w }};
+}
 
 float4 f4_add(float4 a, float4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
@@ -1024,6 +1373,46 @@ float f4_len(float4 a) {
 	return sqrtf(f4_lensqr(a));
 }
 
+float4 f4_normalize(float4 a) {
+	return f4_div_f(a, f4_lensqr(a));
+}
+
+
+double4 d4_ctor_d(double x){
+	return (double4){{ x, }};
+}
+
+double4 d4_ctor_d4(double4 xyzw){
+	return (double4){{ xyzw.x, xyzw.y, xyzw.z, xyzw.w }};
+}
+
+double4 d4_ctor_d3d(double3 xyz, double w){
+	return (double4){{ xyz.x, xyz.y, xyz.z, w }};
+}
+
+double4 d4_ctor_d2d2(double2 xy, double2 zw){
+	return (double4){{ xy.x, xy.y, zw.x, zw.y }};
+}
+
+double4 d4_ctor_dd3(double x, double3 yzw){
+	return (double4){{ x, yzw.x, yzw.y, yzw.z }};
+}
+
+double4 d4_ctor_d2dd(double2 xy, double z, double w){
+	return (double4){{ xy.x, xy.y, z, w }};
+}
+
+double4 d4_ctor_dd2d(double x, double2 yz, double w){
+	return (double4){{ x, yz.x, yz.y, w }};
+}
+
+double4 d4_ctor_ddd2(double x, double y, double2 zw){
+	return (double4){{ x, y, zw.x, zw.y }};
+}
+
+double4 d4_ctor_dddd(double x, double y, double z, double w){
+	return (double4){{ x, y, z, w }};
+}
 
 double4 d4_add(double4 a, double4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
@@ -1077,6 +1466,46 @@ double d4_len(double4 a) {
 	return sqrt(d4_lensqr(a));
 }
 
+double4 d4_normalize(double4 a) {
+	return d4_div_d(a, d4_lensqr(a));
+}
+
+
+int4 i4_ctor_i(int x){
+	return (int4){{ x, }};
+}
+
+int4 i4_ctor_i4(int4 xyzw){
+	return (int4){{ xyzw.x, xyzw.y, xyzw.z, xyzw.w }};
+}
+
+int4 i4_ctor_i3i(int3 xyz, int w){
+	return (int4){{ xyz.x, xyz.y, xyz.z, w }};
+}
+
+int4 i4_ctor_i2i2(int2 xy, int2 zw){
+	return (int4){{ xy.x, xy.y, zw.x, zw.y }};
+}
+
+int4 i4_ctor_ii3(int x, int3 yzw){
+	return (int4){{ x, yzw.x, yzw.y, yzw.z }};
+}
+
+int4 i4_ctor_i2ii(int2 xy, int z, int w){
+	return (int4){{ xy.x, xy.y, z, w }};
+}
+
+int4 i4_ctor_ii2i(int x, int2 yz, int w){
+	return (int4){{ x, yz.x, yz.y, w }};
+}
+
+int4 i4_ctor_iii2(int x, int y, int2 zw){
+	return (int4){{ x, y, zw.x, zw.y }};
+}
+
+int4 i4_ctor_iiii(int x, int y, int z, int w){
+	return (int4){{ x, y, z, w }};
+}
 
 int4 i4_add(int4 a, int4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
@@ -1127,6 +1556,42 @@ int i4_lensqr(int4 a) {
 }
 
 
+unsigned4 u4_ctor_u(unsigned x){
+	return (unsigned4){{ x, }};
+}
+
+unsigned4 u4_ctor_u4(unsigned4 xyzw){
+	return (unsigned4){{ xyzw.x, xyzw.y, xyzw.z, xyzw.w }};
+}
+
+unsigned4 u4_ctor_u3u(unsigned3 xyz, unsigned w){
+	return (unsigned4){{ xyz.x, xyz.y, xyz.z, w }};
+}
+
+unsigned4 u4_ctor_u2u2(unsigned2 xy, unsigned2 zw){
+	return (unsigned4){{ xy.x, xy.y, zw.x, zw.y }};
+}
+
+unsigned4 u4_ctor_uu3(unsigned x, unsigned3 yzw){
+	return (unsigned4){{ x, yzw.x, yzw.y, yzw.z }};
+}
+
+unsigned4 u4_ctor_u2uu(unsigned2 xy, unsigned z, unsigned w){
+	return (unsigned4){{ xy.x, xy.y, z, w }};
+}
+
+unsigned4 u4_ctor_uu2u(unsigned x, unsigned2 yz, unsigned w){
+	return (unsigned4){{ x, yz.x, yz.y, w }};
+}
+
+unsigned4 u4_ctor_uuu2(unsigned x, unsigned y, unsigned2 zw){
+	return (unsigned4){{ x, y, zw.x, zw.y }};
+}
+
+unsigned4 u4_ctor_uuuu(unsigned x, unsigned y, unsigned z, unsigned w){
+	return (unsigned4){{ x, y, z, w }};
+}
+
 unsigned4 u4_add(unsigned4 a, unsigned4 b) {
 	for (size_t i = 0; i < 4; i++) a.c[i] += b.c[i];
 	return a;
@@ -1176,6 +1641,62 @@ unsigned u4_lensqr(unsigned4 a) {
 }
 
 
+float2x2 f2x2_add_f(float2x2 a, float b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+float2x2 f2x2_add_f2x2(float2x2 a, float2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+float2x2 f2x2_sub_f(float2x2 a, float b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+float2x2 f2x2_sub_f2x2(float2x2 a, float2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+float2x2 f2x2_mul_f(float2x2 a, float b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+float2x2 f2x2_mul_f2x2(float2x2 a, float2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+float2x2 f2x2_div_f(float2x2 a, float b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+float2x2 f2x2_div_f2x2(float2x2 a, float2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 float2x2 f2x2_transpose(float2x2 a) {
 	return (float2x2){
 		.x = {{ a.xx, a.yx, }},
@@ -1183,6 +1704,62 @@ float2x2 f2x2_transpose(float2x2 a) {
 	};
 }
 
+
+double2x2 d2x2_add_d(double2x2 a, double b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+double2x2 d2x2_add_d2x2(double2x2 a, double2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+double2x2 d2x2_sub_d(double2x2 a, double b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+double2x2 d2x2_sub_d2x2(double2x2 a, double2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+double2x2 d2x2_mul_d(double2x2 a, double b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+double2x2 d2x2_mul_d2x2(double2x2 a, double2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+double2x2 d2x2_div_d(double2x2 a, double b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+double2x2 d2x2_div_d2x2(double2x2 a, double2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
 
 double2x2 d2x2_transpose(double2x2 a) {
 	return (double2x2){
@@ -1192,6 +1769,62 @@ double2x2 d2x2_transpose(double2x2 a) {
 }
 
 
+int2x2 i2x2_add_i(int2x2 a, int b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+int2x2 i2x2_add_i2x2(int2x2 a, int2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+int2x2 i2x2_sub_i(int2x2 a, int b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+int2x2 i2x2_sub_i2x2(int2x2 a, int2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+int2x2 i2x2_mul_i(int2x2 a, int b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+int2x2 i2x2_mul_i2x2(int2x2 a, int2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+int2x2 i2x2_div_i(int2x2 a, int b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+int2x2 i2x2_div_i2x2(int2x2 a, int2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 int2x2 i2x2_transpose(int2x2 a) {
 	return (int2x2){
 		.x = {{ a.xx, a.yx, }},
@@ -1200,6 +1833,62 @@ int2x2 i2x2_transpose(int2x2 a) {
 }
 
 
+unsigned2x2 u2x2_add_u(unsigned2x2 a, unsigned b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+unsigned2x2 u2x2_add_u2x2(unsigned2x2 a, unsigned2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+unsigned2x2 u2x2_sub_u(unsigned2x2 a, unsigned b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+unsigned2x2 u2x2_sub_u2x2(unsigned2x2 a, unsigned2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+unsigned2x2 u2x2_mul_u(unsigned2x2 a, unsigned b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+unsigned2x2 u2x2_mul_u2x2(unsigned2x2 a, unsigned2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+unsigned2x2 u2x2_div_u(unsigned2x2 a, unsigned b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+unsigned2x2 u2x2_div_u2x2(unsigned2x2 a, unsigned2x2 b) {
+	for (size_t j = 0; j < 2; j++)
+		for (size_t i = 0; i < 2; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 unsigned2x2 u2x2_transpose(unsigned2x2 a) {
 	return (unsigned2x2){
 		.x = {{ a.xx, a.yx, }},
@@ -1207,6 +1896,62 @@ unsigned2x2 u2x2_transpose(unsigned2x2 a) {
 	};
 }
 
+
+float3x3 f3x3_add_f(float3x3 a, float b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+float3x3 f3x3_add_f3x3(float3x3 a, float3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+float3x3 f3x3_sub_f(float3x3 a, float b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+float3x3 f3x3_sub_f3x3(float3x3 a, float3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+float3x3 f3x3_mul_f(float3x3 a, float b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+float3x3 f3x3_mul_f3x3(float3x3 a, float3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+float3x3 f3x3_div_f(float3x3 a, float b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+float3x3 f3x3_div_f3x3(float3x3 a, float3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
 
 float3x3 f3x3_transpose(float3x3 a) {
 	return (float3x3){
@@ -1217,6 +1962,62 @@ float3x3 f3x3_transpose(float3x3 a) {
 }
 
 
+double3x3 d3x3_add_d(double3x3 a, double b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+double3x3 d3x3_add_d3x3(double3x3 a, double3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+double3x3 d3x3_sub_d(double3x3 a, double b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+double3x3 d3x3_sub_d3x3(double3x3 a, double3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+double3x3 d3x3_mul_d(double3x3 a, double b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+double3x3 d3x3_mul_d3x3(double3x3 a, double3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+double3x3 d3x3_div_d(double3x3 a, double b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+double3x3 d3x3_div_d3x3(double3x3 a, double3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 double3x3 d3x3_transpose(double3x3 a) {
 	return (double3x3){
 		.x = {{ a.xx, a.yx, a.zx, }},
@@ -1225,6 +2026,62 @@ double3x3 d3x3_transpose(double3x3 a) {
 	};
 }
 
+
+int3x3 i3x3_add_i(int3x3 a, int b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+int3x3 i3x3_add_i3x3(int3x3 a, int3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+int3x3 i3x3_sub_i(int3x3 a, int b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+int3x3 i3x3_sub_i3x3(int3x3 a, int3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+int3x3 i3x3_mul_i(int3x3 a, int b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+int3x3 i3x3_mul_i3x3(int3x3 a, int3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+int3x3 i3x3_div_i(int3x3 a, int b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+int3x3 i3x3_div_i3x3(int3x3 a, int3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
 
 int3x3 i3x3_transpose(int3x3 a) {
 	return (int3x3){
@@ -1235,6 +2092,62 @@ int3x3 i3x3_transpose(int3x3 a) {
 }
 
 
+unsigned3x3 u3x3_add_u(unsigned3x3 a, unsigned b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+unsigned3x3 u3x3_add_u3x3(unsigned3x3 a, unsigned3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+unsigned3x3 u3x3_sub_u(unsigned3x3 a, unsigned b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+unsigned3x3 u3x3_sub_u3x3(unsigned3x3 a, unsigned3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+unsigned3x3 u3x3_mul_u(unsigned3x3 a, unsigned b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+unsigned3x3 u3x3_mul_u3x3(unsigned3x3 a, unsigned3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+unsigned3x3 u3x3_div_u(unsigned3x3 a, unsigned b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+unsigned3x3 u3x3_div_u3x3(unsigned3x3 a, unsigned3x3 b) {
+	for (size_t j = 0; j < 3; j++)
+		for (size_t i = 0; i < 3; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 unsigned3x3 u3x3_transpose(unsigned3x3 a) {
 	return (unsigned3x3){
 		.x = {{ a.xx, a.yx, a.zx, }},
@@ -1243,6 +2156,62 @@ unsigned3x3 u3x3_transpose(unsigned3x3 a) {
 	};
 }
 
+
+float4x4 f4x4_add_f(float4x4 a, float b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+float4x4 f4x4_add_f4x4(float4x4 a, float4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+float4x4 f4x4_sub_f(float4x4 a, float b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+float4x4 f4x4_sub_f4x4(float4x4 a, float4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+float4x4 f4x4_mul_f(float4x4 a, float b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+float4x4 f4x4_mul_f4x4(float4x4 a, float4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+float4x4 f4x4_div_f(float4x4 a, float b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+float4x4 f4x4_div_f4x4(float4x4 a, float4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
 
 float4x4 f4x4_transpose(float4x4 a) {
 	return (float4x4){
@@ -1254,6 +2223,62 @@ float4x4 f4x4_transpose(float4x4 a) {
 }
 
 
+double4x4 d4x4_add_d(double4x4 a, double b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+double4x4 d4x4_add_d4x4(double4x4 a, double4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+double4x4 d4x4_sub_d(double4x4 a, double b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+double4x4 d4x4_sub_d4x4(double4x4 a, double4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+double4x4 d4x4_mul_d(double4x4 a, double b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+double4x4 d4x4_mul_d4x4(double4x4 a, double4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+double4x4 d4x4_div_d(double4x4 a, double b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+double4x4 d4x4_div_d4x4(double4x4 a, double4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 double4x4 d4x4_transpose(double4x4 a) {
 	return (double4x4){
 		.x = {{ a.xx, a.yx, a.zx, a.wx, }},
@@ -1264,6 +2289,62 @@ double4x4 d4x4_transpose(double4x4 a) {
 }
 
 
+int4x4 i4x4_add_i(int4x4 a, int b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+int4x4 i4x4_add_i4x4(int4x4 a, int4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+int4x4 i4x4_sub_i(int4x4 a, int b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+int4x4 i4x4_sub_i4x4(int4x4 a, int4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+int4x4 i4x4_mul_i(int4x4 a, int b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+int4x4 i4x4_mul_i4x4(int4x4 a, int4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+int4x4 i4x4_div_i(int4x4 a, int b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+int4x4 i4x4_div_i4x4(int4x4 a, int4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
+
 int4x4 i4x4_transpose(int4x4 a) {
 	return (int4x4){
 		.x = {{ a.xx, a.yx, a.zx, a.wx, }},
@@ -1273,6 +2354,62 @@ int4x4 i4x4_transpose(int4x4 a) {
 	};
 }
 
+
+unsigned4x4 u4x4_add_u(unsigned4x4 a, unsigned b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b;
+	return a;
+}
+
+unsigned4x4 u4x4_add_u4x4(unsigned4x4 a, unsigned4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] += b.v[j].c[i];
+	return a;
+}
+
+unsigned4x4 u4x4_sub_u(unsigned4x4 a, unsigned b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b;
+	return a;
+}
+
+unsigned4x4 u4x4_sub_u4x4(unsigned4x4 a, unsigned4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] -= b.v[j].c[i];
+	return a;
+}
+
+unsigned4x4 u4x4_mul_u(unsigned4x4 a, unsigned b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b;
+	return a;
+}
+
+unsigned4x4 u4x4_mul_u4x4(unsigned4x4 a, unsigned4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] *= b.v[j].c[i];
+	return a;
+}
+
+unsigned4x4 u4x4_div_u(unsigned4x4 a, unsigned b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b;
+	return a;
+}
+
+unsigned4x4 u4x4_div_u4x4(unsigned4x4 a, unsigned4x4 b) {
+	for (size_t j = 0; j < 4; j++)
+		for (size_t i = 0; i < 4; i++)
+			a.v[j].c[i] /= b.v[j].c[i];
+	return a;
+}
 
 unsigned4x4 u4x4_transpose(unsigned4x4 a) {
 	return (unsigned4x4){
