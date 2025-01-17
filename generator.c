@@ -1,18 +1,21 @@
 /* TODO:
 - func: vec normalization
-- func: vec―mat multiplication
+- func: mat―vec, vec-mat, mat-mat product
 - func: vec clamp, scalar
 - func: vec min max, scalar
 - func: vec min max, scalar
 - func: vec floor, ceil
 - func: vec lerp, slerp
+- func: mat determinant
 - func: mat lerp, slerp
 - macro: mat identity constructor
 - macro: vec axis constructor
-- macro: print format
+- macro: print formatù
 - constructors
 - conversion
-- rotation?
+- rotation, scale, translate?
+- something with perspective distortions?
+- quaternion?
 - some kind of swizzling?
 - bool vectors?
 - quadruple?
@@ -22,6 +25,7 @@
 - shorter type names e.g. f3 vs float3, d4x4 vs double4x4?
 - matrices with differing row and column sizes e.g. 4x3?
 - dont use size_t
+- C11 generics?
 */
 
 #include <stdlib.h>
@@ -46,6 +50,7 @@ enum DimensionType {
 	DIM_SCALAR,
 	DIM_VECTOR,
 	DIM_MATRIX,
+	DIM_COUNT,
 };
 
 struct datatype_info {
@@ -506,6 +511,31 @@ void gen_func_vector_len(FILE *stream, enum DataType type, size_t rows, enum Fun
 	}
 }
 
+void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass, enum DimensionType b_dimtype) {
+	GEN_MATNAME(mat_name, type.name, rows);
+	GEN_MATNAME(mat_nickname, type.nickname, rows);
+	GEN_MATNAME(b_name, type.name, rows);
+	GEN_MATNAME(b_nickname, type.nickname, rows);
+	
+	if (b_dimtype == DIM_SCALAR) {
+		b_name[strlen(b_name)-3] = '\0';
+		b_nickname[strlen(b_nickname)-3] = '\0';
+	}
+	else if (b_dimtype != DIM_MATRIX) return;
+	
+	fprintf(stream,
+		"%s %s_%s_%s(%s a, %s b)",
+		mat_name, mat_nickname, operator.name, b_nickname, mat_name, b_name);
+	END_FUNCDEF(stream)
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream,
+			" {\n\tfor (size_t j = 0; j < %zu; j++)\n\t\tfor (size_t i = 0; i < %zu; i++)\n\t\t\ta.v[j].c[i] %s= b",
+			rows, rows, operator.op_token);
+		if (b_dimtype == DIM_MATRIX) fprintf(stream, ".v[j].c[i]");
+		fprintf(stream, ";\n\treturn a;\n}\n\n");
+	}
+}
+
 void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	if (specfuncs[SPECFUNC_TRANSPOSE].valid_datatypes[type] == false) return;
 	GEN_MATNAME(mat_name, types[type].name, rows)
@@ -567,6 +597,10 @@ int main() {
 		for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
 				fprintf(stdout, "\n");
+				for (size_t operator = 0; operator < OPERATORS_COUNT; operator++) {
+					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
+					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_MATRIX);
+				}
 				gen_func_matrix_transpose(stdout, type, n, pass);
 			}
 		}
