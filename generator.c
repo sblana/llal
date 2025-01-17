@@ -1,5 +1,4 @@
 /* TODO:
-- func: vec normalization
 - func: mat―vec, vec-mat, mat-mat product
 - func: vec clamp, scalar
 - func: vec min max, scalar
@@ -113,6 +112,7 @@ struct func_info {
 enum SpecFunc {
 	SPECFUNC_LENGTH_SQUARED = 0,
 	SPECFUNC_LENGTH,
+	SPECFUNC_NORMALIZE,
 	SPECFUNC_DOT_PRODUCT,
 	SPECFUNC_CROSS_PRODUCT,
 	SPECFUNC_TRANSPOSE,
@@ -149,6 +149,22 @@ const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 			[DATATYPE_UNSIGNED] = false,
 		},
 		.return_dim = DIM_SCALAR,
+		.arity = 1,
+		.param_dims = { DIM_VECTOR, }
+	},
+	[SPECFUNC_NORMALIZE] = {
+		.name = {
+			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
+			.func_root = "normalize",
+			.suffix = FUNC_AFFIX_NONE,
+		},
+		.valid_datatypes = {
+			[DATATYPE_FLOAT]	= true,
+			[DATATYPE_DOUBLE]	= true,
+			[DATATYPE_INT]		= false, // is there a point to normalizing an integer vector?
+			[DATATYPE_UNSIGNED] = false,
+		},
+		.return_dim = DIM_VECTOR,
 		.arity = 1,
 		.param_dims = { DIM_VECTOR, }
 	},
@@ -584,6 +600,24 @@ void gen_func_vector_len(FILE *stream, enum DataType type, size_t rows, enum Fun
 	}
 }
 
+void gen_func_vector_normalize(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	if (specfuncs[SPECFUNC_NORMALIZE].valid_datatypes[type] == false) return;
+	GEN_VECNAME(vec_name, types[type].name, rows)
+	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
+	char func_sig[128];
+	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_NORMALIZE], type, rows, type, rows);
+	
+	fprintf(stream, "%s", func_sig);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		char len_symbol[128];
+		sngen_func_symbol(len_symbol, 128, specfuncs[SPECFUNC_LENGTH_SQUARED], type, rows);
+		fprintf(stream,
+			" {\n\treturn %s_div_%s(%s, %s(%s));\n}\n\n",
+			vec_nickname, types[type].nickname, parameter_name_sets[0][0], len_symbol, parameter_name_sets[0][0]);
+	}
+}
+
 void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass, enum DimensionType b_dimtype) {
 	GEN_MATNAME(mat_name, type.name, rows);
 	GEN_MATNAME(mat_nickname, type.nickname, rows);
@@ -638,7 +672,6 @@ int main() {
 		"\n"
 		"#include <stdlib.h>\n"
 		"#include <math.h>\n"
-		"\n"
 		"\n");
 	for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 		fprintf(stdout, "\n");
@@ -665,6 +698,7 @@ int main() {
 				gen_func_vector_cross(stdout, type, n, pass);
 				gen_func_vector_lensqr(stdout, type, n, pass);
 				gen_func_vector_len(stdout, type, n, pass);
+				gen_func_vector_normalize(stdout, type, n, pass);
 			}
 		}
 		// Matrix functions
