@@ -491,36 +491,29 @@ void gen_ctor_vector(FILE *stream, struct datatype_info type, size_t rows, enum 
 	}
 }
 
-void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass) {
+void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass, enum DimensionType b_dimtype) {
 	GEN_VECNAME(vec_name, type.name, rows)
 	GEN_VECNAME(vec_nickname, type.nickname, rows)
+	GEN_VECNAME(b_name, type.name, rows);
+	GEN_VECNAME(b_nickname, type.nickname, rows);
 	
-	fprintf(stream,
-		"%s %s_%s(%s a, %s b)",
-		vec_name, vec_nickname, operator.name, vec_name, vec_name);
-	END_FUNCDEF(stream)
-	else if (pass == IMPLEMENTATION)
-		fprintf(stream, " {\n"
-				"\tfor (size_t i = 0; i < %zu; i++) a.c[i] %s= b.c[i];\n"
-				"\treturn a;\n"
-			"}\n\n",
-			rows, operator.op_token);
-}
-
-void gen_func_vector_scalar_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass) {
-	GEN_VECNAME(vec_name, type.name, rows);
-	GEN_VECNAME(vec_nickname, type.nickname, rows);
+	if (b_dimtype == DIM_SCALAR) {
+		b_name[strlen(b_name)-1] = '\0';
+		b_nickname[strlen(b_nickname)-1] = '\0';
+	}
+	else if (b_dimtype != DIM_VECTOR) return;
 	
-	fprintf(stream,
-		"%s %s_%s_%s(%s a, %s b)",
-		vec_name, vec_nickname, operator.name, type.nickname, vec_name, type.name);
+	fprintf(stream, "%s %s_%s", vec_name, vec_nickname, operator.name);
+	if (b_dimtype == DIM_SCALAR) fprintf(stream, "_%s", b_nickname);
+	fprintf(stream, "(%s a, %s b)", vec_name, b_name);
 	END_FUNCDEF(stream)
-	else if (pass == IMPLEMENTATION)
-		fprintf(stream, " {\n"
-				"\tfor (size_t i = 0; i < %zu; i++) a.c[i] %s= b;\n"
-				"\treturn a;\n"
-			"}\n\n",
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream,
+			" {\n\tfor (size_t i = 0; i < %zu; i++)\n\t\ta.c[i] %s= b",
 			rows, operator.op_token);
+		if (b_dimtype == DIM_VECTOR) fprintf(stream, ".c[i]");
+		fprintf(stream, ";\n\treturn a;\n}\n\n");
+	}
 }
 
 void gen_func_vector_dot(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
@@ -630,9 +623,9 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 	else if (b_dimtype != DIM_MATRIX) return;
 	
-	fprintf(stream,
-		"%s %s_%s_%s(%s a, %s b)",
-		mat_name, mat_nickname, operator.name, b_nickname, mat_name, b_name);
+	fprintf(stream, "%s %s_%s", mat_name, mat_nickname, operator.name);
+	if (b_dimtype == DIM_SCALAR) fprintf(stream, "_%s", b_nickname);
+	fprintf(stream, "(%s a, %s b)", mat_name, b_name);
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
 		fprintf(stream,
@@ -691,8 +684,8 @@ int main() {
 				fprintf(stdout, "\n");
 				gen_ctor_vector(stdout, types[type], n, pass);
 				for (size_t operator = 0; operator < OPERATORS_COUNT; operator++) {
-					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass);
-					gen_func_vector_scalar_elementary(stdout, types[type], n, operators[operator], pass);
+					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass, DIM_VECTOR);
+					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 				}
 				gen_func_vector_dot(stdout, type, n, pass);
 				gen_func_vector_cross(stdout, type, n, pass);
@@ -706,8 +699,8 @@ int main() {
 			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
 				fprintf(stdout, "\n");
 				for (size_t operator = 0; operator < OPERATORS_COUNT; operator++) {
-					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_MATRIX);
+					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 				}
 				gen_func_matrix_transpose(stdout, type, n, pass);
 			}
