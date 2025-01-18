@@ -1,5 +1,4 @@
 /* TODO:
-- func: mat―vec, vec-mat, mat-mat product
 - func: vec clamp, scalar
 - func: vec min max, scalar
 - func: vec min max, scalar
@@ -25,6 +24,8 @@
 - matrices with differing row and column sizes e.g. 4x3?
 - dont use size_t
 - C11 generics?
+- kahan summation or similar algorithms?
+- hypot?
 */
 
 #include <stdlib.h>
@@ -345,7 +346,6 @@ size_t sngen_func_signature(char *buffer, size_t buffer_size, struct func_info f
 		enum DataType p_type;
 		size_t p_rows;
 		for (size_t j = 0; j <= i + (func.return_dim != DIM_VOID); j++) {
-			// printf("%zu", j);
 			p_type = va_arg(args, enum DataType);
 			p_rows = va_arg(args, size_t);
 		}
@@ -636,6 +636,78 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 }
 
+void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	fprintf(stream, "%s %s_matmult_%s(%s a, %s b)",
+		mat_name, mat_nickname, mat_nickname, mat_name, mat_name);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream," {"
+			"\n\t%s c = {0};"
+			"\n\tfor (size_t j = 0; j < %zu; j++) {"
+			"\n\t\tfor (size_t i = 0; i < %zu; i++) {"
+			"\n\t\t\tfor (size_t k = 0; k < %zu; k++) {"
+			"\n\t\t\t\tc.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];"
+			"\n\t\t\t}"
+			"\n\t\t}"
+			"\n\t}"
+			"\n\treturn c;"
+			"\n}\n\n",
+			mat_name, rows, rows, rows);
+	}
+}
+
+void gen_func_matmult_mat_cvec(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, types[type].name, rows)
+	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	fprintf(stream, "%s %s_matmult_%sc(%s a, %s b)",
+		vec_name, mat_nickname, vec_nickname, mat_name, vec_name);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		char dot_symbol[128];
+		sngen_func_symbol(dot_symbol, 128, specfuncs[SPECFUNC_DOT_PRODUCT], type, rows, type, rows);
+		fprintf(stream," {\n\treturn (%s){{", vec_name);
+		for (size_t i = 0; i < rows; i++) {
+			fprintf(stream, "\n\t\t%s((%s){{", dot_symbol, vec_name);
+			// fprintf(stream, "\n\t\t");
+			for (size_t k = 0; k < rows; k++) {
+				fprintf(stream, " a.%c%c",
+					vcomp_alias[0][k], vcomp_alias[0][i]);
+				// fprintf(stream, "a.%c%c*b.%c",
+				// 	vcomp_alias[0][k], vcomp_alias[0][i], vcomp_alias[0][k]);
+				if ((k + 1) < rows)
+					fprintf(stream, ",");
+					// fprintf(stream, " + ");
+			}
+			fprintf(stream, " }}, b),");
+			// fprintf(stream, ",");
+		}
+		fprintf(stream, "\n\t}};\n}\n\n");
+	}
+}
+
+void gen_func_matmult_rvec_mat(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, types[type].name, rows)
+	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	fprintf(stream, "%s %s_matmult_%sc(%s a, %s b)",
+		vec_name, vec_nickname, mat_nickname, vec_name, mat_name);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		char dot_symbol[128];
+		sngen_func_symbol(dot_symbol, 128, specfuncs[SPECFUNC_DOT_PRODUCT], type, rows, type, rows);
+		fprintf(stream," {\n\treturn (%s){{", vec_name);
+		for (size_t j = 0; j < rows; j++) {
+			fprintf(stream, "\n\t\t%s(a, b.%c),", dot_symbol, vcomp_alias[0][j]);
+		}
+		fprintf(stream, "\n\t}};\n}\n\n");
+	}
+}
+
 void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	if (specfuncs[SPECFUNC_TRANSPOSE].valid_datatypes[type] == false) return;
 	GEN_MATNAME(mat_name, types[type].name, rows)
@@ -702,6 +774,9 @@ int main() {
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_MATRIX);
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 				}
+				gen_func_matmult_mat_mat(stdout, type, n, pass);
+				gen_func_matmult_mat_cvec(stdout, type, n, pass);
+				gen_func_matmult_rvec_mat(stdout, type, n, pass);
 				gen_func_matrix_transpose(stdout, type, n, pass);
 			}
 		}
