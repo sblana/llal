@@ -694,7 +694,7 @@ void gen_func_matmult_rvec_mat(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
-	fprintf(stream, "%s %s_matmult_%sc(%s a, %s b)",
+	fprintf(stream, "%s %s_matmult_%s(%s a, %s b)",
 		vec_name, vec_nickname, mat_nickname, vec_name, mat_name);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
