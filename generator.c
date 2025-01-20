@@ -9,7 +9,7 @@
 - macro: mat identity constructor
 - macro: vec axis constructor
 - macro: print formatù
-- constructors
+- mat constructors
 - conversion
 - rotation, scale, translate?
 - something with perspective distortions?
@@ -22,10 +22,10 @@
 - use inttypes.h?
 - shorter type names e.g. f3 vs float3, d4x4 vs double4x4?
 - matrices with differing row and column sizes e.g. 4x3?
-- dont use size_t
 - C11 generics?
 - kahan summation or similar algorithms?
 - hypot?
+- no scalar fields for matrices? e.g. no .xx .xy .yx etc
 */
 
 #include <stdlib.h>
@@ -509,7 +509,7 @@ void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t 
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
 		fprintf(stream,
-			" {\n\tfor (size_t i = 0; i < %zu; i++)\n\t\ta.c[i] %s= b",
+			" {\n\tfor (unsigned i = 0; i < %zu; i++)\n\t\ta.c[i] %s= b",
 			rows, operator.op_token);
 		if (b_dimtype == DIM_VECTOR) fprintf(stream, ".c[i]");
 		fprintf(stream, ";\n\treturn a;\n}\n\n");
@@ -629,7 +629,7 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
 		fprintf(stream,
-			" {\n\tfor (size_t j = 0; j < %zu; j++)\n\t\tfor (size_t i = 0; i < %zu; i++)\n\t\t\ta.v[j].c[i] %s= b",
+			" {\n\tfor (unsigned j = 0; j < %zu; j++)\n\t\tfor (unsigned i = 0; i < %zu; i++)\n\t\t\ta.v[j].c[i] %s= b",
 			rows, rows, operator.op_token);
 		if (b_dimtype == DIM_MATRIX) fprintf(stream, ".v[j].c[i]");
 		fprintf(stream, ";\n\treturn a;\n}\n\n");
@@ -645,9 +645,9 @@ void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enu
 	if (pass == IMPLEMENTATION) {
 		fprintf(stream," {"
 			"\n\t%s c = {0};"
-			"\n\tfor (size_t j = 0; j < %zu; j++) {"
-			"\n\t\tfor (size_t i = 0; i < %zu; i++) {"
-			"\n\t\t\tfor (size_t k = 0; k < %zu; k++) {"
+			"\n\tfor (unsigned j = 0; j < %zu; j++) {"
+			"\n\t\tfor (unsigned i = 0; i < %zu; i++) {"
+			"\n\t\t\tfor (unsigned k = 0; k < %zu; k++) {"
 			"\n\t\t\t\tc.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];"
 			"\n\t\t\t}"
 			"\n\t\t}"
@@ -735,7 +735,6 @@ int main() {
 		"#ifndef LLAL_H\n"
 		"#define LLAL_H\n"
 		"\n"
-		"#include <stdlib.h>\n"
 		"#include <math.h>\n"
 		"\n");
 	for (size_t n = 2; n <= V_MAX_COMPS; n++) {
@@ -751,6 +750,10 @@ int main() {
 	for (enum FuncGenPassType pass = DEFINITION; pass <= IMPLEMENTATION; pass++) {
 		if (pass == IMPLEMENTATION)
 			fprintf(stdout, "\n#ifdef LLAL_IMPLEMENTATION\n");
+		// Scalar functions
+		// for (size_t type = 0; type < DATATYPES_COUNT; type++) {
+		// }
+		// Vector functions
 		for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
 				fprintf(stdout, "\n");
