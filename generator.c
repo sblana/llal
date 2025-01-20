@@ -14,7 +14,7 @@
 - rotation, scale, translate?
 - something with perspective distortions?
 - quaternion?
-- some kind of swizzling?
+- some kind of swizzling? min ~4000 lines via functions.
 - bool vectors?
 - quadruple?
 - function inlining?
@@ -491,6 +491,49 @@ void gen_ctor_vector(FILE *stream, struct datatype_info type, size_t rows, enum 
 	}
 }
 
+void gen_swizzle_vector(FILE *stream, struct datatype_info type, size_t rows, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, type.name, rows)
+	GEN_VECNAME(vec_nickname, type.nickname, rows)
+	if (rows == 1) {
+		vec_name[strlen(vec_name)-1] = '\0';
+		vec_nickname[strlen(vec_name)] = '\0';
+	}
+	for (int return_rows = 2; return_rows <= V_MAX_COMPS; return_rows++) {
+		GEN_VECNAME(ret_name, type.name, (size_t)return_rows)
+		for (int i = 0; i < pow(rows, return_rows); i++) {
+			// generate return swizzles
+			int return_swizzle[return_rows];
+			int temp = i;
+			size_t sum = 0;
+			for (int j = 0; j < return_rows; j++) {
+				return_swizzle[j] = (temp % rows);
+				sum += return_swizzle[j];
+				temp /= rows;
+			}
+			
+			// writing return type and func symbol
+			fprintf(stream, "%s %s_",
+				ret_name, vec_nickname);
+			for (int comp = 0; comp < return_rows; comp++) {
+				fprintf(stream, "%c", vcomp_alias[0][return_swizzle[comp]]);
+			}
+			fprintf(stream, "(%s a)", vec_name);
+			END_FUNCDEF(stream)
+			else if (pass == IMPLEMENTATION) {
+				fprintf(stream, "{return (%s){{", ret_name);
+				for (int comp = 0; comp < return_rows; comp++) {
+					fprintf(stream, " a");
+					if (rows > 1)
+						fprintf(stream, ".%c", vcomp_alias[0][return_swizzle[comp]]);
+					if (comp < (return_rows - 1))
+						fprintf(stream, ",");
+				}
+				fprintf(stream, " }};}\n");
+			}
+		}
+	}
+}
+
 void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t rows, struct operator_info operator, enum FuncGenPassType pass, enum DimensionType b_dimtype) {
 	GEN_VECNAME(vec_name, type.name, rows)
 	GEN_VECNAME(vec_nickname, type.nickname, rows)
@@ -783,6 +826,15 @@ int main() {
 				gen_func_matrix_transpose(stdout, type, n, pass);
 			}
 		}
+#		ifdef GENERATE_SWIZZLING
+		// Swizzling
+		for (size_t n = 1; n <= V_MAX_COMPS; n++) {
+			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
+				fprintf(stdout, "\n");
+				gen_swizzle_vector(stdout, types[type], n, pass);
+			}
+		}
+#		endif //ifdef GENERATE_SWIZZLING
 		if (pass == DEFINITION)
 			fprintf(stdout, "\n");
 	}
