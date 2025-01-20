@@ -1,7 +1,6 @@
 #ifndef LLAL_H
 #define LLAL_H
 
-#include <stdlib.h>
 #include <math.h>
 
 
@@ -758,49 +757,49 @@ float2 f2_ctor_ff(float x, float y){
 }
 
 float2 f2_add(float2 a, float2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 float2 f2_add_f(float2 a, float b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b;
 	return a;
 }
 
 float2 f2_sub(float2 a, float2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 float2 f2_sub_f(float2 a, float b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 float2 f2_mul(float2 a, float2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 float2 f2_mul_f(float2 a, float b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 float2 f2_div(float2 a, float2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 float2 f2_div_f(float2 a, float b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -835,49 +834,49 @@ double2 d2_ctor_dd(double x, double y){
 }
 
 double2 d2_add(double2 a, double2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 double2 d2_add_d(double2 a, double b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b;
 	return a;
 }
 
 double2 d2_sub(double2 a, double2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 double2 d2_sub_d(double2 a, double b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 double2 d2_mul(double2 a, double2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 double2 d2_mul_d(double2 a, double b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 double2 d2_div(double2 a, double2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 double2 d2_div_d(double2 a, double b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -912,49 +911,49 @@ int2 i2_ctor_ii(int x, int y){
 }
 
 int2 i2_add(int2 a, int2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 int2 i2_add_i(int2 a, int b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b;
 	return a;
 }
 
 int2 i2_sub(int2 a, int2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 int2 i2_sub_i(int2 a, int b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 int2 i2_mul(int2 a, int2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 int2 i2_mul_i(int2 a, int b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 int2 i2_div(int2 a, int2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 int2 i2_div_i(int2 a, int b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -981,49 +980,49 @@ unsigned2 u2_ctor_uu(unsigned x, unsigned y){
 }
 
 unsigned2 u2_add(unsigned2 a, unsigned2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 unsigned2 u2_add_u(unsigned2 a, unsigned b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] += b;
 	return a;
 }
 
 unsigned2 u2_sub(unsigned2 a, unsigned2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 unsigned2 u2_sub_u(unsigned2 a, unsigned b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 unsigned2 u2_mul(unsigned2 a, unsigned2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 unsigned2 u2_mul_u(unsigned2 a, unsigned b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 unsigned2 u2_div(unsigned2 a, unsigned2 b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 unsigned2 u2_div_u(unsigned2 a, unsigned b) {
-	for (size_t i = 0; i < 2; i++)
+	for (unsigned i = 0; i < 2; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1058,49 +1057,49 @@ float3 f3_ctor_fff(float x, float y, float z){
 }
 
 float3 f3_add(float3 a, float3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 float3 f3_add_f(float3 a, float b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b;
 	return a;
 }
 
 float3 f3_sub(float3 a, float3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 float3 f3_sub_f(float3 a, float b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 float3 f3_mul(float3 a, float3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 float3 f3_mul_f(float3 a, float b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 float3 f3_div(float3 a, float3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 float3 f3_div_f(float3 a, float b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1151,49 +1150,49 @@ double3 d3_ctor_ddd(double x, double y, double z){
 }
 
 double3 d3_add(double3 a, double3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 double3 d3_add_d(double3 a, double b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b;
 	return a;
 }
 
 double3 d3_sub(double3 a, double3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 double3 d3_sub_d(double3 a, double b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 double3 d3_mul(double3 a, double3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 double3 d3_mul_d(double3 a, double b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 double3 d3_div(double3 a, double3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 double3 d3_div_d(double3 a, double b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1244,49 +1243,49 @@ int3 i3_ctor_iii(int x, int y, int z){
 }
 
 int3 i3_add(int3 a, int3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 int3 i3_add_i(int3 a, int b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b;
 	return a;
 }
 
 int3 i3_sub(int3 a, int3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 int3 i3_sub_i(int3 a, int b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 int3 i3_mul(int3 a, int3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 int3 i3_mul_i(int3 a, int b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 int3 i3_div(int3 a, int3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 int3 i3_div_i(int3 a, int b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1329,49 +1328,49 @@ unsigned3 u3_ctor_uuu(unsigned x, unsigned y, unsigned z){
 }
 
 unsigned3 u3_add(unsigned3 a, unsigned3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 unsigned3 u3_add_u(unsigned3 a, unsigned b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] += b;
 	return a;
 }
 
 unsigned3 u3_sub(unsigned3 a, unsigned3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 unsigned3 u3_sub_u(unsigned3 a, unsigned b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 unsigned3 u3_mul(unsigned3 a, unsigned3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 unsigned3 u3_mul_u(unsigned3 a, unsigned b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 unsigned3 u3_div(unsigned3 a, unsigned3 b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 unsigned3 u3_div_u(unsigned3 a, unsigned b) {
-	for (size_t i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1422,49 +1421,49 @@ float4 f4_ctor_ffff(float x, float y, float z, float w){
 }
 
 float4 f4_add(float4 a, float4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 float4 f4_add_f(float4 a, float b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b;
 	return a;
 }
 
 float4 f4_sub(float4 a, float4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 float4 f4_sub_f(float4 a, float b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 float4 f4_mul(float4 a, float4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 float4 f4_mul_f(float4 a, float b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 float4 f4_div(float4 a, float4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 float4 f4_div_f(float4 a, float b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1523,49 +1522,49 @@ double4 d4_ctor_dddd(double x, double y, double z, double w){
 }
 
 double4 d4_add(double4 a, double4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 double4 d4_add_d(double4 a, double b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b;
 	return a;
 }
 
 double4 d4_sub(double4 a, double4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 double4 d4_sub_d(double4 a, double b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 double4 d4_mul(double4 a, double4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 double4 d4_mul_d(double4 a, double b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 double4 d4_div(double4 a, double4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 double4 d4_div_d(double4 a, double b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1624,49 +1623,49 @@ int4 i4_ctor_iiii(int x, int y, int z, int w){
 }
 
 int4 i4_add(int4 a, int4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 int4 i4_add_i(int4 a, int b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b;
 	return a;
 }
 
 int4 i4_sub(int4 a, int4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 int4 i4_sub_i(int4 a, int b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 int4 i4_mul(int4 a, int4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 int4 i4_mul_i(int4 a, int b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 int4 i4_div(int4 a, int4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 int4 i4_div_i(int4 a, int b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1717,49 +1716,49 @@ unsigned4 u4_ctor_uuuu(unsigned x, unsigned y, unsigned z, unsigned w){
 }
 
 unsigned4 u4_add(unsigned4 a, unsigned4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b.c[i];
 	return a;
 }
 
 unsigned4 u4_add_u(unsigned4 a, unsigned b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] += b;
 	return a;
 }
 
 unsigned4 u4_sub(unsigned4 a, unsigned4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b.c[i];
 	return a;
 }
 
 unsigned4 u4_sub_u(unsigned4 a, unsigned b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] -= b;
 	return a;
 }
 
 unsigned4 u4_mul(unsigned4 a, unsigned4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b.c[i];
 	return a;
 }
 
 unsigned4 u4_mul_u(unsigned4 a, unsigned b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] *= b;
 	return a;
 }
 
 unsigned4 u4_div(unsigned4 a, unsigned4 b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b.c[i];
 	return a;
 }
 
 unsigned4 u4_div_u(unsigned4 a, unsigned b) {
-	for (size_t i = 0; i < 4; i++)
+	for (unsigned i = 0; i < 4; i++)
 		a.c[i] /= b;
 	return a;
 }
@@ -1774,66 +1773,66 @@ unsigned u4_lensqr(unsigned4 a) {
 
 
 float2x2 f2x2_add(float2x2 a, float2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 float2x2 f2x2_add_f(float2x2 a, float b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 float2x2 f2x2_sub(float2x2 a, float2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 float2x2 f2x2_sub_f(float2x2 a, float b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 float2x2 f2x2_mul(float2x2 a, float2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 float2x2 f2x2_mul_f(float2x2 a, float b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 float2x2 f2x2_div(float2x2 a, float2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 float2x2 f2x2_div_f(float2x2 a, float b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 float2x2 f2x2_matmult_f2x2(float2x2 a, float2x2 b) {
 	float2x2 c = {0};
-	for (size_t j = 0; j < 2; j++) {
-		for (size_t i = 0; i < 2; i++) {
-			for (size_t k = 0; k < 2; k++) {
+	for (unsigned j = 0; j < 2; j++) {
+		for (unsigned i = 0; i < 2; i++) {
+			for (unsigned k = 0; k < 2; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -1864,66 +1863,66 @@ float2x2 f2x2_transpose(float2x2 a) {
 
 
 double2x2 d2x2_add(double2x2 a, double2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 double2x2 d2x2_add_d(double2x2 a, double b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 double2x2 d2x2_sub(double2x2 a, double2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 double2x2 d2x2_sub_d(double2x2 a, double b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 double2x2 d2x2_mul(double2x2 a, double2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 double2x2 d2x2_mul_d(double2x2 a, double b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 double2x2 d2x2_div(double2x2 a, double2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 double2x2 d2x2_div_d(double2x2 a, double b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 double2x2 d2x2_matmult_d2x2(double2x2 a, double2x2 b) {
 	double2x2 c = {0};
-	for (size_t j = 0; j < 2; j++) {
-		for (size_t i = 0; i < 2; i++) {
-			for (size_t k = 0; k < 2; k++) {
+	for (unsigned j = 0; j < 2; j++) {
+		for (unsigned i = 0; i < 2; i++) {
+			for (unsigned k = 0; k < 2; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -1954,66 +1953,66 @@ double2x2 d2x2_transpose(double2x2 a) {
 
 
 int2x2 i2x2_add(int2x2 a, int2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 int2x2 i2x2_add_i(int2x2 a, int b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 int2x2 i2x2_sub(int2x2 a, int2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 int2x2 i2x2_sub_i(int2x2 a, int b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 int2x2 i2x2_mul(int2x2 a, int2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 int2x2 i2x2_mul_i(int2x2 a, int b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 int2x2 i2x2_div(int2x2 a, int2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 int2x2 i2x2_div_i(int2x2 a, int b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 int2x2 i2x2_matmult_i2x2(int2x2 a, int2x2 b) {
 	int2x2 c = {0};
-	for (size_t j = 0; j < 2; j++) {
-		for (size_t i = 0; i < 2; i++) {
-			for (size_t k = 0; k < 2; k++) {
+	for (unsigned j = 0; j < 2; j++) {
+		for (unsigned i = 0; i < 2; i++) {
+			for (unsigned k = 0; k < 2; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2044,66 +2043,66 @@ int2x2 i2x2_transpose(int2x2 a) {
 
 
 unsigned2x2 u2x2_add(unsigned2x2 a, unsigned2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 unsigned2x2 u2x2_add_u(unsigned2x2 a, unsigned b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 unsigned2x2 u2x2_sub(unsigned2x2 a, unsigned2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 unsigned2x2 u2x2_sub_u(unsigned2x2 a, unsigned b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 unsigned2x2 u2x2_mul(unsigned2x2 a, unsigned2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 unsigned2x2 u2x2_mul_u(unsigned2x2 a, unsigned b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 unsigned2x2 u2x2_div(unsigned2x2 a, unsigned2x2 b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 unsigned2x2 u2x2_div_u(unsigned2x2 a, unsigned b) {
-	for (size_t j = 0; j < 2; j++)
-		for (size_t i = 0; i < 2; i++)
+	for (unsigned j = 0; j < 2; j++)
+		for (unsigned i = 0; i < 2; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 unsigned2x2 u2x2_matmult_u2x2(unsigned2x2 a, unsigned2x2 b) {
 	unsigned2x2 c = {0};
-	for (size_t j = 0; j < 2; j++) {
-		for (size_t i = 0; i < 2; i++) {
-			for (size_t k = 0; k < 2; k++) {
+	for (unsigned j = 0; j < 2; j++) {
+		for (unsigned i = 0; i < 2; i++) {
+			for (unsigned k = 0; k < 2; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2134,66 +2133,66 @@ unsigned2x2 u2x2_transpose(unsigned2x2 a) {
 
 
 float3x3 f3x3_add(float3x3 a, float3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 float3x3 f3x3_add_f(float3x3 a, float b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 float3x3 f3x3_sub(float3x3 a, float3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 float3x3 f3x3_sub_f(float3x3 a, float b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 float3x3 f3x3_mul(float3x3 a, float3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 float3x3 f3x3_mul_f(float3x3 a, float b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 float3x3 f3x3_div(float3x3 a, float3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 float3x3 f3x3_div_f(float3x3 a, float b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 float3x3 f3x3_matmult_f3x3(float3x3 a, float3x3 b) {
 	float3x3 c = {0};
-	for (size_t j = 0; j < 3; j++) {
-		for (size_t i = 0; i < 3; i++) {
-			for (size_t k = 0; k < 3; k++) {
+	for (unsigned j = 0; j < 3; j++) {
+		for (unsigned i = 0; i < 3; i++) {
+			for (unsigned k = 0; k < 3; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2227,66 +2226,66 @@ float3x3 f3x3_transpose(float3x3 a) {
 
 
 double3x3 d3x3_add(double3x3 a, double3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 double3x3 d3x3_add_d(double3x3 a, double b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 double3x3 d3x3_sub(double3x3 a, double3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 double3x3 d3x3_sub_d(double3x3 a, double b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 double3x3 d3x3_mul(double3x3 a, double3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 double3x3 d3x3_mul_d(double3x3 a, double b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 double3x3 d3x3_div(double3x3 a, double3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 double3x3 d3x3_div_d(double3x3 a, double b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 double3x3 d3x3_matmult_d3x3(double3x3 a, double3x3 b) {
 	double3x3 c = {0};
-	for (size_t j = 0; j < 3; j++) {
-		for (size_t i = 0; i < 3; i++) {
-			for (size_t k = 0; k < 3; k++) {
+	for (unsigned j = 0; j < 3; j++) {
+		for (unsigned i = 0; i < 3; i++) {
+			for (unsigned k = 0; k < 3; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2320,66 +2319,66 @@ double3x3 d3x3_transpose(double3x3 a) {
 
 
 int3x3 i3x3_add(int3x3 a, int3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 int3x3 i3x3_add_i(int3x3 a, int b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 int3x3 i3x3_sub(int3x3 a, int3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 int3x3 i3x3_sub_i(int3x3 a, int b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 int3x3 i3x3_mul(int3x3 a, int3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 int3x3 i3x3_mul_i(int3x3 a, int b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 int3x3 i3x3_div(int3x3 a, int3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 int3x3 i3x3_div_i(int3x3 a, int b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 int3x3 i3x3_matmult_i3x3(int3x3 a, int3x3 b) {
 	int3x3 c = {0};
-	for (size_t j = 0; j < 3; j++) {
-		for (size_t i = 0; i < 3; i++) {
-			for (size_t k = 0; k < 3; k++) {
+	for (unsigned j = 0; j < 3; j++) {
+		for (unsigned i = 0; i < 3; i++) {
+			for (unsigned k = 0; k < 3; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2413,66 +2412,66 @@ int3x3 i3x3_transpose(int3x3 a) {
 
 
 unsigned3x3 u3x3_add(unsigned3x3 a, unsigned3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 unsigned3x3 u3x3_add_u(unsigned3x3 a, unsigned b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 unsigned3x3 u3x3_sub(unsigned3x3 a, unsigned3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 unsigned3x3 u3x3_sub_u(unsigned3x3 a, unsigned b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 unsigned3x3 u3x3_mul(unsigned3x3 a, unsigned3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 unsigned3x3 u3x3_mul_u(unsigned3x3 a, unsigned b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 unsigned3x3 u3x3_div(unsigned3x3 a, unsigned3x3 b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 unsigned3x3 u3x3_div_u(unsigned3x3 a, unsigned b) {
-	for (size_t j = 0; j < 3; j++)
-		for (size_t i = 0; i < 3; i++)
+	for (unsigned j = 0; j < 3; j++)
+		for (unsigned i = 0; i < 3; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 unsigned3x3 u3x3_matmult_u3x3(unsigned3x3 a, unsigned3x3 b) {
 	unsigned3x3 c = {0};
-	for (size_t j = 0; j < 3; j++) {
-		for (size_t i = 0; i < 3; i++) {
-			for (size_t k = 0; k < 3; k++) {
+	for (unsigned j = 0; j < 3; j++) {
+		for (unsigned i = 0; i < 3; i++) {
+			for (unsigned k = 0; k < 3; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2506,66 +2505,66 @@ unsigned3x3 u3x3_transpose(unsigned3x3 a) {
 
 
 float4x4 f4x4_add(float4x4 a, float4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 float4x4 f4x4_add_f(float4x4 a, float b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 float4x4 f4x4_sub(float4x4 a, float4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 float4x4 f4x4_sub_f(float4x4 a, float b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 float4x4 f4x4_mul(float4x4 a, float4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 float4x4 f4x4_mul_f(float4x4 a, float b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 float4x4 f4x4_div(float4x4 a, float4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 float4x4 f4x4_div_f(float4x4 a, float b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 float4x4 f4x4_matmult_f4x4(float4x4 a, float4x4 b) {
 	float4x4 c = {0};
-	for (size_t j = 0; j < 4; j++) {
-		for (size_t i = 0; i < 4; i++) {
-			for (size_t k = 0; k < 4; k++) {
+	for (unsigned j = 0; j < 4; j++) {
+		for (unsigned i = 0; i < 4; i++) {
+			for (unsigned k = 0; k < 4; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2602,66 +2601,66 @@ float4x4 f4x4_transpose(float4x4 a) {
 
 
 double4x4 d4x4_add(double4x4 a, double4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 double4x4 d4x4_add_d(double4x4 a, double b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 double4x4 d4x4_sub(double4x4 a, double4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 double4x4 d4x4_sub_d(double4x4 a, double b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 double4x4 d4x4_mul(double4x4 a, double4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 double4x4 d4x4_mul_d(double4x4 a, double b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 double4x4 d4x4_div(double4x4 a, double4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 double4x4 d4x4_div_d(double4x4 a, double b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 double4x4 d4x4_matmult_d4x4(double4x4 a, double4x4 b) {
 	double4x4 c = {0};
-	for (size_t j = 0; j < 4; j++) {
-		for (size_t i = 0; i < 4; i++) {
-			for (size_t k = 0; k < 4; k++) {
+	for (unsigned j = 0; j < 4; j++) {
+		for (unsigned i = 0; i < 4; i++) {
+			for (unsigned k = 0; k < 4; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2698,66 +2697,66 @@ double4x4 d4x4_transpose(double4x4 a) {
 
 
 int4x4 i4x4_add(int4x4 a, int4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 int4x4 i4x4_add_i(int4x4 a, int b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 int4x4 i4x4_sub(int4x4 a, int4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 int4x4 i4x4_sub_i(int4x4 a, int b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 int4x4 i4x4_mul(int4x4 a, int4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 int4x4 i4x4_mul_i(int4x4 a, int b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 int4x4 i4x4_div(int4x4 a, int4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 int4x4 i4x4_div_i(int4x4 a, int b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 int4x4 i4x4_matmult_i4x4(int4x4 a, int4x4 b) {
 	int4x4 c = {0};
-	for (size_t j = 0; j < 4; j++) {
-		for (size_t i = 0; i < 4; i++) {
-			for (size_t k = 0; k < 4; k++) {
+	for (unsigned j = 0; j < 4; j++) {
+		for (unsigned i = 0; i < 4; i++) {
+			for (unsigned k = 0; k < 4; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
@@ -2794,66 +2793,66 @@ int4x4 i4x4_transpose(int4x4 a) {
 
 
 unsigned4x4 u4x4_add(unsigned4x4 a, unsigned4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b.v[j].c[i];
 	return a;
 }
 
 unsigned4x4 u4x4_add_u(unsigned4x4 a, unsigned b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] += b;
 	return a;
 }
 
 unsigned4x4 u4x4_sub(unsigned4x4 a, unsigned4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b.v[j].c[i];
 	return a;
 }
 
 unsigned4x4 u4x4_sub_u(unsigned4x4 a, unsigned b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] -= b;
 	return a;
 }
 
 unsigned4x4 u4x4_mul(unsigned4x4 a, unsigned4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b.v[j].c[i];
 	return a;
 }
 
 unsigned4x4 u4x4_mul_u(unsigned4x4 a, unsigned b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] *= b;
 	return a;
 }
 
 unsigned4x4 u4x4_div(unsigned4x4 a, unsigned4x4 b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b.v[j].c[i];
 	return a;
 }
 
 unsigned4x4 u4x4_div_u(unsigned4x4 a, unsigned b) {
-	for (size_t j = 0; j < 4; j++)
-		for (size_t i = 0; i < 4; i++)
+	for (unsigned j = 0; j < 4; j++)
+		for (unsigned i = 0; i < 4; i++)
 			a.v[j].c[i] /= b;
 	return a;
 }
 
 unsigned4x4 u4x4_matmult_u4x4(unsigned4x4 a, unsigned4x4 b) {
 	unsigned4x4 c = {0};
-	for (size_t j = 0; j < 4; j++) {
-		for (size_t i = 0; i < 4; i++) {
-			for (size_t k = 0; k < 4; k++) {
+	for (unsigned j = 0; j < 4; j++) {
+		for (unsigned i = 0; i < 4; i++) {
+			for (unsigned k = 0; k < 4; k++) {
 				c.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];
 			}
 		}
