@@ -35,6 +35,12 @@
 #include <math.h>
 #include <stdarg.h>
 
+/* Generation options */
+// Uses MIN and MAX macros instead of its expansion directly.
+#define USE_MINMAX_MACRO
+// Generates roughly 2000 swizzling functions.
+// #define GENERATE_SWIZZLING
+
 #define GEN_VECNAME(name, str, N) char name[strlen(str)+2]; \
 								  sprintf(name, "%s%zu", str, N); \
 								  name[strlen(str)+1] = '\0';
@@ -97,12 +103,15 @@ const struct operator_info operators[OPERATORS_COUNT] = {
 enum Coalescers {
 	COALESCER_SUM = 0,
 	COALESCER_PRODUCT,
+	COALESCER_MIN,
+	COALESCER_MAX,
 	COALESCERS_COUNT,
 };
 
 const struct operator_info coalescers[COALESCERS_COUNT] = {
 	[COALESCER_SUM] = {"clesce_sum", "+"},
 	[COALESCER_PRODUCT] = {"clesce_product", "*"},
+	[COALESCER_MAX] = {"clesce_max", ">"},
 };
 
 #define FUNC_MAX_ARITY 4
@@ -396,15 +405,37 @@ void gen_func_vector_coalesce(FILE *stream, enum DataType type, size_t rows, str
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
 	fprintf(stream, "%s ", types[type].name);
-	fprintf(stream, "%s_%s", vec_nickname, coalescer.name);
+	fprintf(stream, "%s_%s", vec_nickname, coalescers[coalescer].name);
 	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
-		fprintf(stream, " {\n\treturn ");
-		for (size_t i = 0; i < rows; i++) {
-			fprintf(stream, "%s.%c", parameter_name_sets[0][0], vcomp_alias[0][i]);
-			if (i < (rows - 1))
-				fprintf(stream, " %s ", coalescer.op_token);
+		fprintf(stream, " {");
+		if (coalescer < COALESCER_MIN) {
+			fprintf(stream, "\n\treturn ");
+			for (size_t i = 0; i < rows; i++) {
+				fprintf(stream, "%s.%c", parameter_name_sets[0][0], vcomp_alias[0][i]);
+				if (i < (rows - 1))
+					fprintf(stream, " %s ", coalescers[coalescer].op_token);
+			}
+		}
+		else {
+			for (size_t i = 1; i < rows; i++) {
+				fprintf(stream, "\n\t");
+				if (i < (rows - 1))
+					fprintf(stream, "%s.%c = ", parameter_name_sets[0][0], vcomp_alias[0][i - (i%2)]);
+				else
+					fprintf(stream, "return ");
+#ifdef USE_MINMAX_MACRO
+				fprintf(stream, "%s(%s.%c, %s.%c);",
+					coalescer == COALESCER_MIN ? "MIN" : "MAX",
+#else
+				fprintf(stream, "%s.%c %s %s.%c ? %s.%c : %s.%c;",
+					parameter_name_sets[0][0], vcomp_alias[0][(i < (rows - 1)) ? i - (i%2) : 0], coalescers[coalescer].op_token,
+					parameter_name_sets[0][0], vcomp_alias[0][(i == 2) && (i < (rows - 1)) ? i+1 : i/2 + 1],
+#endif
+					parameter_name_sets[0][0], vcomp_alias[0][(i < (rows - 1)) ? i - (i%2) : 0],
+					parameter_name_sets[0][0], vcomp_alias[0][(i == 2) && (i < (rows - 1)) ? i+1 : i/2 + 1]);
+			}
 		}
 		fprintf(stream, ";\n}\n\n");
 	}
@@ -532,26 +563,41 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 }
 
-void gen_func_matrix_coalesce(FILE *stream, enum DataType type, size_t rows, struct operator_info coalescer, enum FuncGenPassType pass) {
+void gen_func_matrix_coalesce(FILE *stream, enum DataType type, size_t rows, enum Coalescers coalescer, enum FuncGenPassType pass) {
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
 	fprintf(stream, "%s ", types[type].name);
-	fprintf(stream, "%s_%s", mat_nickname, coalescer.name);
+	fprintf(stream, "%s_%s", mat_nickname, coalescers[coalescer].name);
 	fprintf(stream, "(%s %s)", mat_name, parameter_name_sets[0][0]);
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
-		fprintf(stream, " {\n\treturn (\n\t");
+		fprintf(stream, " {\n\treturn ");
+		if (coalescer >= COALESCER_MIN) {
+			fprintf(stream, "%s_%s(%s_ctor_", vec_nickname, coalescers[coalescer].name, vec_nickname);
+			for (size_t i = 0; i < rows; i++) {
+				fprintf(stream, "%s", types[type].nickname);
+			}
+		}
+		fprintf(stream, "(\n\t");
 		for (size_t j = 0; j < rows; j++) {
 			fprintf(stream, "\t");
 			fprintf(stream, "%s_%s(%s.%c)", vec_nickname, coalescer.name, parameter_name_sets[0][0], vcomp_alias[0][j]);
 			if (j < (rows - 1)) fprintf(stream, " %s", coalescer.op_token);
+			fprintf(stream, "%s_%s(%s.%c)", vec_nickname, coalescers[coalescer].name, parameter_name_sets[0][0], vcomp_alias[0][j]);
+			if (j < (rows - 1)) {
+				if (coalescer < COALESCER_MIN) fprintf(stream, " %s", coalescers[coalescer].op_token);
+				else fprintf(stream, ",");
+			}
+			// for (size_t i = 0; i < rows; i++) {
 			fprintf(stream, "\n\t");
 		}
+		if (coalescer >= COALESCER_MIN) fprintf(stream, ")");
 		fprintf(stream, ");\n}\n\n");
 	}
 }
+
 void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
@@ -652,6 +698,15 @@ int main() {
 		"#define LLAL_H\n"
 		"\n"
 		"#include <math.h>\n"
+#ifdef USE_MINMAX_MACRO
+		"\n"
+		"#ifndef MIN\n"
+		"#define MIN(a, b) ((a) < (b) ? (a) : (b))\n"
+		"#endif\n"
+		"#ifndef MAX\n"
+		"#define MAX(a, b) ((a) > (b) ? (a) : (b))\n"
+		"#endif\n"
+#endif
 		"\n");
 	for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 		fprintf(stdout, "\n");
@@ -679,7 +734,7 @@ int main() {
 					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 				}
 				for (size_t coalescer = 0; coalescer < COALESCERS_COUNT; coalescer++) {
-					gen_func_vector_coalesce(stdout, type, n, coalescers[coalescer], pass);
+					gen_func_vector_coalesce(stdout, type, n, coalescer, pass);
 				}
 				gen_func_vector_dot(stdout, type, n, pass);
 				gen_func_vector_cross(stdout, type, n, pass);
@@ -697,7 +752,7 @@ int main() {
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 				}
 				for (size_t coalescer = 0; coalescer < COALESCERS_COUNT; coalescer++) {
-					gen_func_matrix_coalesce(stdout, type, n, coalescers[coalescer], pass);
+					gen_func_matrix_coalesce(stdout, type, n, coalescer, pass);
 				}
 				gen_func_matmult_mat_mat(stdout, type, n, pass);
 				gen_func_matmult_mat_cvec(stdout, type, n, pass);
