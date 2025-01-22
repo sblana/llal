@@ -89,25 +89,10 @@ const struct operator_info operators[OPERATORS_COUNT] = {
 
 #define FUNC_MAX_ARITY 4
 
-enum FuncAffix {
-	FUNC_AFFIX_NONE = 0,
-	FUNC_AFFIX_RETURN_TYPE,
-	FUNC_AFFIX_PARAM_1_TYPE,
-	FUNC_AFFIX_COUNT,
-};
-
-struct func_name {
-	enum FuncAffix prefix;
-	char *func_root;
-	enum FuncAffix suffix;
-};
-
 struct func_info {
-	struct func_name name;
+	char *name_fmt;
 	bool valid_datatypes[DATATYPES_COUNT];
-	enum DimensionType return_dim;
 	size_t arity;
-	enum DimensionType param_dims[FUNC_MAX_ARITY];
 };
 
 enum SpecFunc {
@@ -122,100 +107,64 @@ enum SpecFunc {
 
 const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 	[SPECFUNC_LENGTH_SQUARED] = {
-		.name = {
-			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
-			.func_root = "lensqr",
-			.suffix = FUNC_AFFIX_NONE,
-		},
+		.name_fmt = "%s_lensqr",
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
 			[DATATYPE_INT]		= true,
 			[DATATYPE_UNSIGNED] = true,
 		},
-		.return_dim = DIM_SCALAR,
 		.arity = 1,
-		.param_dims = { DIM_VECTOR, }
 	},
 	[SPECFUNC_LENGTH] = {
-		.name = {
-			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
-			.func_root = "len",
-			.suffix = FUNC_AFFIX_NONE,
-		},
+		.name_fmt = "%s_len",
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
 			[DATATYPE_INT]		= false,
 			[DATATYPE_UNSIGNED] = false,
 		},
-		.return_dim = DIM_SCALAR,
 		.arity = 1,
-		.param_dims = { DIM_VECTOR, }
 	},
 	[SPECFUNC_NORMALIZE] = {
-		.name = {
-			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
-			.func_root = "normalize",
-			.suffix = FUNC_AFFIX_NONE,
-		},
+		.name_fmt = "%s_normalize",
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
 			[DATATYPE_INT]		= false, // is there a point to normalizing an integer vector?
 			[DATATYPE_UNSIGNED] = false,
 		},
-		.return_dim = DIM_VECTOR,
 		.arity = 1,
-		.param_dims = { DIM_VECTOR, }
 	},
 	[SPECFUNC_DOT_PRODUCT] = {
-		.name = {
-			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
-			.func_root = "dot",
-			.suffix = FUNC_AFFIX_NONE,
-		},
+		.name_fmt = "%s_dot",
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
 			[DATATYPE_INT]		= true,
 			[DATATYPE_UNSIGNED] = true,
 		},
-		.return_dim = DIM_SCALAR,
 		.arity = 2,
-		.param_dims = { DIM_VECTOR, DIM_VECTOR, }
 	},
 	[SPECFUNC_CROSS_PRODUCT] = {
-		.name = {
-			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
-			.func_root = "cross",
-			.suffix = FUNC_AFFIX_NONE,
-		},
+		.name_fmt = "%s_cross",
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
 			[DATATYPE_INT]		= true,
 			[DATATYPE_UNSIGNED] = false,
 		},
-		.return_dim = DIM_VECTOR,
 		.arity = 2,
-		.param_dims = { DIM_VECTOR, DIM_VECTOR, }
 	},
 	[SPECFUNC_TRANSPOSE] = {
-		.name = {
-			.prefix = FUNC_AFFIX_PARAM_1_TYPE,
-			.func_root = "transpose",
-			.suffix = FUNC_AFFIX_NONE,
-		},
+		.name_fmt = "%s_transpose",
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
 			[DATATYPE_INT]		= true,
 			[DATATYPE_UNSIGNED] = true,
 		},
-		.return_dim = DIM_MATRIX,
 		.arity = 1,
-		.param_dims = { DIM_MATRIX, }
 	},
 };
 
@@ -236,140 +185,6 @@ enum FuncGenPassType {
 	DEFINITION = 0,
 	IMPLEMENTATION,
 };
-
-// returns length. 0 if errored. varargs should be <enum DataType type, size_t rows>
-size_t vsngen_func_symbol(char *buffer, size_t buffer_size, struct func_info func, va_list ap) {
-	if (!buffer_size) return false;
-	buffer[0] = '\0';
-	size_t name_length = 0;
-	// worst code known to man but prolly changing it all later anyways
-	for (size_t i = 0; i < 2; i++) {
-		if ((!i ? func.name.prefix : func.name.suffix) != FUNC_AFFIX_NONE) {
-			switch (!i ? func.name.prefix : func.name.suffix) {
-				case FUNC_AFFIX_PARAM_1_TYPE:
-				{
-					va_list aq;
-					va_copy(aq, ap);
-					enum DataType p0_type = va_arg(aq, enum DataType);
-					size_t p0_rows = va_arg(aq, size_t);
-					va_end(aq);
-					
-					GEN_MATNAME(p0_nickname, types[p0_type].nickname, p0_rows)
-					if (func.param_dims[0] == DIM_SCALAR) {
-						p0_nickname[strlen(p0_nickname)-3] = '\0';
-					}
-					else if (func.param_dims[0] == DIM_VECTOR) {
-						p0_nickname[strlen(p0_nickname)-2] = '\0';
-					}
-					snprintf(buffer + name_length, buffer_size - name_length, !i ? "%s_" : "_%s", p0_nickname);
-					name_length += strlen(p0_nickname) + 1;
-					if (buffer_size < name_length) return false;
-					buffer[name_length] = '\0';
-					break;
-				}
-				// TODO: implement other affixes
-				default:
-					return false;
-			}
-		}
-		if (!i) {
-			snprintf(buffer + name_length, buffer_size - name_length, "%s", func.name.func_root);
-			name_length += strlen(func.name.func_root);
-			if (buffer_size < name_length) return false;
-			buffer[name_length] = '\0';
-		}
-	}
-	return name_length;
-}
-
-// returns length. 0 if errored. varargs should be <enum DataType type, size_t rows>
-size_t sngen_func_symbol(char *buffer, size_t buffer_size, struct func_info func, ...) {
-	va_list args;
-	va_start(args, func);
-	size_t symbol_length = vsngen_func_symbol(buffer, buffer_size, func, args);
-	va_end(args);
-	return symbol_length;
-}
-
-// returns length. 0 if errored. varargs should be <enum DataType type, size_t rows>
-size_t sngen_func_signature(char *buffer, size_t buffer_size, struct func_info func, ...) {
-	va_list args;
-	va_start(args, func);
-	if (func.return_dim != DIM_VOID) {
-		va_arg(args, enum DataType);
-		va_arg(args, size_t);
-	}
-	size_t symbol_length = vsngen_func_symbol(buffer, buffer_size, func, args);
-	va_end(args);
-	
-	size_t signature_length = symbol_length;
-	
-	if (func.return_dim != DIM_VOID) {
-		va_start(args, func);
-		enum DataType r_type = va_arg(args, enum DataType);
-		size_t r_rows = va_arg(args, size_t);
-		va_end(args);
-		
-		GEN_MATNAME(r_name, types[r_type].name, r_rows)
-		size_t r_name_length = strlen(r_name);
-		
-		if (func.return_dim == DIM_SCALAR) {
-			r_name_length -= 3;
-			r_name[r_name_length] = '\0';
-		}
-		
-		if (func.return_dim == DIM_VECTOR) {
-			r_name_length -= 2;
-			r_name[r_name_length] = '\0';
-		}
-		
-		signature_length += r_name_length + 1;
-		if (buffer_size < signature_length) return false;
-		for (size_t i = symbol_length + 1; i > 0; i--) {
-			buffer[i + r_name_length] = buffer[i - 1];
-		}
-		strcpy(buffer, r_name);
-		buffer[strlen(r_name)] = ' ';
-	}
-	else {
-		/* TODO: implement */
-	}
-	
-	if (buffer_size < signature_length + 1) return false;
-	snprintf(buffer + signature_length, buffer_size - signature_length, "(");
-	signature_length++;
-	
-	for (size_t i = 0; i < func.arity; i++) {
-		if (func.param_dims[i] == DIM_VOID) return false;
-		
-		va_start(args, func);
-		enum DataType p_type;
-		size_t p_rows;
-		for (size_t j = 0; j <= i + (func.return_dim != DIM_VOID); j++) {
-			p_type = va_arg(args, enum DataType);
-			p_rows = va_arg(args, size_t);
-		}
-		va_end(args);
-		
-		GEN_MATNAME(p_name, types[p_type].name, p_rows)
-		if (func.param_dims[i] == DIM_SCALAR) {
-			p_name[strlen(p_name)-3] = '\0';
-		}
-		else if (func.param_dims[i] == DIM_VECTOR) {
-			p_name[strlen(p_name)-2] = '\0';
-		}
-		snprintf(buffer + signature_length, buffer_size - signature_length, "%s %s, ", p_name, parameter_name_sets[0][i]);
-		signature_length += strlen(p_name) + strlen(parameter_name_sets[0][i]) + 3;
-		if (i + 1 == func.arity) signature_length -= 2;
-		if (buffer_size < signature_length) return false;
-	}
-	
-	if (buffer_size < signature_length + 1) return false;
-	snprintf(buffer + signature_length, buffer_size - signature_length, ")");
-	signature_length++;
-	buffer[signature_length] = '\0';
-	return signature_length;
-}
 
 void gen_def_vector(FILE *stream, const char *type_name, size_t rows) {
 	fprintf(stream,
@@ -517,12 +332,12 @@ void gen_swizzle_vector(FILE *stream, struct datatype_info type, size_t rows, en
 			for (int comp = 0; comp < return_rows; comp++) {
 				fprintf(stream, "%c", vcomp_alias[0][return_swizzle[comp]]);
 			}
-			fprintf(stream, "(%s a)", vec_name);
+			fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
 			END_FUNCDEF(stream)
 			else if (pass == IMPLEMENTATION) {
 				fprintf(stream, "{return (%s){{", ret_name);
 				for (int comp = 0; comp < return_rows; comp++) {
-					fprintf(stream, " a");
+					fprintf(stream, " %s", parameter_name_sets[0][0]);
 					if (rows > 1)
 						fprintf(stream, ".%c", vcomp_alias[0][return_swizzle[comp]]);
 					if (comp < (return_rows - 1))
@@ -548,14 +363,13 @@ void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t 
 	
 	fprintf(stream, "%s %s_%s", vec_name, vec_nickname, operator.name);
 	if (b_dimtype == DIM_SCALAR) fprintf(stream, "_%s", b_nickname);
-	fprintf(stream, "(%s a, %s b)", vec_name, b_name);
+	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], b_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
-		fprintf(stream,
-			" {\n\tfor (unsigned i = 0; i < %zu; i++)\n\t\ta.c[i] %s= b",
-			rows, operator.op_token);
+		fprintf(stream, " {\n\tfor (unsigned i = 0; i < %zu; i++)\n\t\t%s.c[i] %s= %s",
+			rows, parameter_name_sets[0][0], operator.op_token, parameter_name_sets[0][1]);
 		if (b_dimtype == DIM_VECTOR) fprintf(stream, ".c[i]");
-		fprintf(stream, ";\n\treturn a;\n}\n\n");
+		fprintf(stream, ";\n\treturn %s;\n}\n\n", parameter_name_sets[0][0]);
 	}
 }
 
@@ -564,16 +378,15 @@ void gen_func_vector_dot(FILE *stream, enum DataType type, size_t rows, enum Fun
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
-	char func_sig[128];
-	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_DOT_PRODUCT], type, (size_t)1, type, rows, type, rows);
-	
-	fprintf(stream, "%s", func_sig);
+	fprintf(stream, "%s ", types[type].name);
+	fprintf(stream, specfuncs[SPECFUNC_DOT_PRODUCT].name_fmt, vec_nickname);
+	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
-		fprintf(stream, " {\n"
-				"\treturn a.x*b.x");
+		fprintf(stream, " {\n\treturn %s.x*%s.x", parameter_name_sets[0][0], parameter_name_sets[0][1]);
 		for (size_t j = 1; j < rows; j++)
-			fprintf(stream, " + a.%c*b.%c", vcomp_alias[0][j], vcomp_alias[0][j]);
+			fprintf(stream, " + %s.%c*%s.%c",
+				parameter_name_sets[0][0], vcomp_alias[0][j], parameter_name_sets[0][1], vcomp_alias[0][j]);
 		fprintf(stream, ";\n}\n\n");
 	}
 }
@@ -583,17 +396,21 @@ void gen_func_vector_cross(FILE *stream, enum DataType type, size_t rows, enum F
 	if (rows != (size_t)3) return;
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
-	char func_sig[128];
-	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_CROSS_PRODUCT], type, rows, type, rows, type, rows);
 	
-	fprintf(stream, "%s", func_sig);
+	fprintf(stream, "%s ", vec_name);
+	fprintf(stream, specfuncs[SPECFUNC_CROSS_PRODUCT].name_fmt, vec_nickname);
+	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
 		fprintf(stream, " {\n\treturn (%s){", vec_name);
 		for (size_t j = 0; j < rows; j++) {
 			fprintf(stream, "\n\t\t.%c = ", vcomp_alias[0][j]);
-			fprintf(stream, "a.%c*b.%c -", vcomp_alias[0][(j+1)%rows], vcomp_alias[0][(j+2)%rows]);
-			fprintf(stream, " a.%c*b.%c,", vcomp_alias[0][(j+2)%rows], vcomp_alias[0][(j+1)%rows]);
+			fprintf(stream, "%s.%c*%s.%c -",
+				parameter_name_sets[0][0], vcomp_alias[0][(j+1)%rows],
+				parameter_name_sets[0][1], vcomp_alias[0][(j+2)%rows]);
+			fprintf(stream, " %s.%c*%s.%c,",
+				parameter_name_sets[0][0], vcomp_alias[0][(j+2)%rows],
+				parameter_name_sets[0][1], vcomp_alias[0][(j+1)%rows]);
 		}
 		fprintf(stream, "\n\t};\n}\n\n");
 	}
@@ -604,15 +421,15 @@ void gen_func_vector_lensqr(FILE *stream, enum DataType type, size_t rows, enum 
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
-	char func_sig[128];
-	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_LENGTH_SQUARED], type, (size_t)1, type, rows);	
-	
-	fprintf(stream, "%s", func_sig);
+	fprintf(stream, "%s ", types[type].name);
+	fprintf(stream, specfuncs[SPECFUNC_LENGTH_SQUARED].name_fmt, vec_nickname);
+	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
-		fprintf(stream, " {\n\treturn a.x*a.x");
+		fprintf(stream, " {\n\treturn %s.x*%s.x", parameter_name_sets[0][0], parameter_name_sets[0][0]);
 		for (size_t j = 1; j < rows; j++)
-			fprintf(stream, " + a.%c*a.%c", vcomp_alias[0][j], vcomp_alias[0][j]);
+			fprintf(stream, " + %s.%c*%s.%c",
+				parameter_name_sets[0][0], vcomp_alias[0][j], parameter_name_sets[0][0], vcomp_alias[0][j]);
 		fprintf(stream, ";\n}\n\n");
 	}
 }
@@ -621,18 +438,18 @@ void gen_func_vector_len(FILE *stream, enum DataType type, size_t rows, enum Fun
 	if (specfuncs[SPECFUNC_LENGTH].valid_datatypes[type] == false) return;
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
-	char func_sig[128];
-	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_LENGTH], type, (size_t)1, type, rows);
 	
-	fprintf(stream, "%s", func_sig);
+	fprintf(stream, "%s ", types[type].name);
+	fprintf(stream, specfuncs[SPECFUNC_LENGTH].name_fmt, vec_nickname);
+	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
 		fprintf(stream, " {\n\treturn sqrt");
 		if (type != DATATYPE_DOUBLE)
 			fprintf(stream, "%c", types[type].func_suffix);
-		char len_symbol[128];
-		sngen_func_symbol(len_symbol, 128, specfuncs[SPECFUNC_LENGTH_SQUARED], type, rows);
-		fprintf(stream, "(%s(a));\n}\n\n", len_symbol);
+		fprintf(stream, "(");
+		fprintf(stream, specfuncs[SPECFUNC_LENGTH_SQUARED].name_fmt, vec_nickname);
+		fprintf(stream, "(%s));\n}\n\n", parameter_name_sets[0][0]);
 	}
 }
 
@@ -640,17 +457,15 @@ void gen_func_vector_normalize(FILE *stream, enum DataType type, size_t rows, en
 	if (specfuncs[SPECFUNC_NORMALIZE].valid_datatypes[type] == false) return;
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
-	char func_sig[128];
-	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_NORMALIZE], type, rows, type, rows);
 	
-	fprintf(stream, "%s", func_sig);
+	fprintf(stream, "%s ", vec_name);
+	fprintf(stream, specfuncs[SPECFUNC_NORMALIZE].name_fmt, vec_nickname);
+	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
-		char len_symbol[128];
-		sngen_func_symbol(len_symbol, 128, specfuncs[SPECFUNC_LENGTH_SQUARED], type, rows);
-		fprintf(stream,
-			" {\n\treturn %s_div_%s(%s, %s(%s));\n}\n\n",
-			vec_nickname, types[type].nickname, parameter_name_sets[0][0], len_symbol, parameter_name_sets[0][0]);
+		fprintf(stream, " {\n\treturn %s_div_%s(%s, ", vec_nickname, types[type].nickname, parameter_name_sets[0][0]);
+		fprintf(stream, specfuncs[SPECFUNC_LENGTH].name_fmt, vec_nickname);
+		fprintf(stream, "(%s));\n}\n\n", parameter_name_sets[0][0]);
 	}
 }
 
@@ -668,22 +483,22 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	
 	fprintf(stream, "%s %s_%s", mat_name, mat_nickname, operator.name);
 	if (b_dimtype == DIM_SCALAR) fprintf(stream, "_%s", b_nickname);
-	fprintf(stream, "(%s a, %s b)", mat_name, b_name);
+	fprintf(stream, "(%s %s, %s %s)", mat_name, parameter_name_sets[0][0], b_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	else if (pass == IMPLEMENTATION) {
 		fprintf(stream,
-			" {\n\tfor (unsigned j = 0; j < %zu; j++)\n\t\tfor (unsigned i = 0; i < %zu; i++)\n\t\t\ta.v[j].c[i] %s= b",
-			rows, rows, operator.op_token);
+			" {\n\tfor (unsigned j = 0; j < %zu; j++)\n\t\tfor (unsigned i = 0; i < %zu; i++)\n\t\t\t%s.v[j].c[i] %s= %s",
+			rows, rows, parameter_name_sets[0][0], operator.op_token, parameter_name_sets[0][1]);
 		if (b_dimtype == DIM_MATRIX) fprintf(stream, ".v[j].c[i]");
-		fprintf(stream, ";\n\treturn a;\n}\n\n");
+		fprintf(stream, ";\n\treturn %s;\n}\n\n", parameter_name_sets[0][0]);
 	}
 }
 
 void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
-	fprintf(stream, "%s %s_matmult_%s(%s a, %s b)",
-		mat_name, mat_nickname, mat_nickname, mat_name, mat_name);
+	fprintf(stream, "%s %s_matmult_%s(%s %s, %s %s)",
+		mat_name, mat_nickname, mat_nickname, mat_name, parameter_name_sets[0][0], mat_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
 		fprintf(stream," {"
@@ -691,13 +506,13 @@ void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enu
 			"\n\tfor (unsigned j = 0; j < %zu; j++) {"
 			"\n\t\tfor (unsigned i = 0; i < %zu; i++) {"
 			"\n\t\t\tfor (unsigned k = 0; k < %zu; k++) {"
-			"\n\t\t\t\tc.v[j].c[i] += a.v[k].c[i]*b.v[j].c[k];"
+			"\n\t\t\t\tc.v[j].c[i] += %s.v[k].c[i]*%s.v[j].c[k];"
 			"\n\t\t\t}"
 			"\n\t\t}"
 			"\n\t}"
 			"\n\treturn c;"
 			"\n}\n\n",
-			mat_name, rows, rows, rows);
+			mat_name, rows, rows, rows, parameter_name_sets[0][0], parameter_name_sets[0][1]);
 	}
 }
 
@@ -706,26 +521,26 @@ void gen_func_matmult_mat_cvec(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
-	fprintf(stream, "%s %s_matmult_%sc(%s a, %s b)",
-		vec_name, mat_nickname, vec_nickname, mat_name, vec_name);
+	fprintf(stream, "%s %s_matmult_%sc(%s %s, %s %s)",
+		vec_name, mat_nickname, vec_nickname, mat_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
-		char dot_symbol[128];
-		sngen_func_symbol(dot_symbol, 128, specfuncs[SPECFUNC_DOT_PRODUCT], type, rows, type, rows);
 		fprintf(stream," {\n\treturn (%s){{", vec_name);
 		for (size_t i = 0; i < rows; i++) {
-			fprintf(stream, "\n\t\t%s((%s){{", dot_symbol, vec_name);
+			fprintf(stream, "\n\t\t");
+			fprintf(stream, specfuncs[SPECFUNC_DOT_PRODUCT].name_fmt, vec_nickname);
+			fprintf(stream, "((%s){{", vec_name);
 			// fprintf(stream, "\n\t\t");
 			for (size_t k = 0; k < rows; k++) {
-				fprintf(stream, " a.%c%c",
-					vcomp_alias[0][k], vcomp_alias[0][i]);
+				fprintf(stream, " %s.%c%c",
+					parameter_name_sets[0][0], vcomp_alias[0][k], vcomp_alias[0][i]);
 				// fprintf(stream, "a.%c%c*b.%c",
 				// 	vcomp_alias[0][k], vcomp_alias[0][i], vcomp_alias[0][k]);
 				if ((k + 1) < rows)
 					fprintf(stream, ",");
 					// fprintf(stream, " + ");
 			}
-			fprintf(stream, " }}, b),");
+			fprintf(stream, " }}, %s),", parameter_name_sets[0][1]);
 			// fprintf(stream, ",");
 		}
 		fprintf(stream, "\n\t}};\n}\n\n");
@@ -737,15 +552,15 @@ void gen_func_matmult_rvec_mat(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
-	fprintf(stream, "%s %sr_matmult_%s(%s a, %s b)",
-		vec_name, vec_nickname, mat_nickname, vec_name, mat_name);
+	fprintf(stream, "%s %sr_matmult_%s(%s %s, %s %s)",
+		vec_name, vec_nickname, mat_nickname, vec_name, parameter_name_sets[0][0], mat_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
-		char dot_symbol[128];
-		sngen_func_symbol(dot_symbol, 128, specfuncs[SPECFUNC_DOT_PRODUCT], type, rows, type, rows);
 		fprintf(stream," {\n\treturn (%s){{", vec_name);
 		for (size_t j = 0; j < rows; j++) {
-			fprintf(stream, "\n\t\t%s(a, b.%c),", dot_symbol, vcomp_alias[0][j]);
+			fprintf(stream, "\n\t\t");
+			fprintf(stream, specfuncs[SPECFUNC_DOT_PRODUCT].name_fmt, vec_nickname);
+			fprintf(stream, "(%s, %s.%c),", parameter_name_sets[0][0], parameter_name_sets[0][1], vcomp_alias[0][j]);
 		}
 		fprintf(stream, "\n\t}};\n}\n\n");
 	}
@@ -755,17 +570,17 @@ void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, en
 	if (specfuncs[SPECFUNC_TRANSPOSE].valid_datatypes[type] == false) return;
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
-	char func_sig[128];
-	sngen_func_signature(func_sig, 128, specfuncs[SPECFUNC_TRANSPOSE], type, rows, type, rows);
 	
-	fprintf(stream, "%s", func_sig);
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_TRANSPOSE].name_fmt, mat_nickname);
+	fprintf(stream, "(%s %s)", mat_name, parameter_name_sets[0][0]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
 		fprintf(stream, " {\n\treturn (%s){", mat_name);
 		for (size_t j = 0; j < rows; j++) {
 			fprintf(stream, "\n\t\t.%c = {{", vcomp_alias[0][j]);
 			for (size_t i = 0; i < rows; i++) {
-				fprintf(stream, " a.%c%c,", vcomp_alias[0][i], vcomp_alias[0][j]);
+				fprintf(stream, " %s.%c%c,", parameter_name_sets[0][0], vcomp_alias[0][i], vcomp_alias[0][j]);
 			}
 			fprintf(stream, " }},");
 		}

@@ -817,7 +817,7 @@ float f2_len(float2 a) {
 }
 
 float2 f2_normalize(float2 a) {
-	return f2_div_f(a, f2_lensqr(a));
+	return f2_div_f(a, f2_len(a));
 }
 
 
@@ -894,7 +894,7 @@ double d2_len(double2 a) {
 }
 
 double2 d2_normalize(double2 a) {
-	return d2_div_d(a, d2_lensqr(a));
+	return d2_div_d(a, d2_len(a));
 }
 
 
@@ -1125,7 +1125,7 @@ float f3_len(float3 a) {
 }
 
 float3 f3_normalize(float3 a) {
-	return f3_div_f(a, f3_lensqr(a));
+	return f3_div_f(a, f3_len(a));
 }
 
 
@@ -1218,7 +1218,7 @@ double d3_len(double3 a) {
 }
 
 double3 d3_normalize(double3 a) {
-	return d3_div_d(a, d3_lensqr(a));
+	return d3_div_d(a, d3_len(a));
 }
 
 
@@ -1481,7 +1481,7 @@ float f4_len(float4 a) {
 }
 
 float4 f4_normalize(float4 a) {
-	return f4_div_f(a, f4_lensqr(a));
+	return f4_div_f(a, f4_len(a));
 }
 
 
@@ -1582,7 +1582,7 @@ double d4_len(double4 a) {
 }
 
 double4 d4_normalize(double4 a) {
-	return d4_div_d(a, d4_lensqr(a));
+	return d4_div_d(a, d4_len(a));
 }
 
 
