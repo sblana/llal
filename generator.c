@@ -111,6 +111,7 @@ enum Coalescers {
 const struct operator_info coalescers[COALESCERS_COUNT] = {
 	[COALESCER_SUM] = {"clesce_sum", "+"},
 	[COALESCER_PRODUCT] = {"clesce_product", "*"},
+	[COALESCER_MIN] = {"clesce_min", "<"},
 	[COALESCER_MAX] = {"clesce_max", ">"},
 };
 
@@ -400,7 +401,7 @@ void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 }
 
-void gen_func_vector_coalesce(FILE *stream, enum DataType type, size_t rows, struct operator_info coalescer, enum FuncGenPassType pass) {
+void gen_func_vector_coalesce(FILE *stream, enum DataType type, size_t rows, enum Coalescers coalescer, enum FuncGenPassType pass) {
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
@@ -583,8 +584,6 @@ void gen_func_matrix_coalesce(FILE *stream, enum DataType type, size_t rows, enu
 		fprintf(stream, "(\n\t");
 		for (size_t j = 0; j < rows; j++) {
 			fprintf(stream, "\t");
-			fprintf(stream, "%s_%s(%s.%c)", vec_nickname, coalescer.name, parameter_name_sets[0][0], vcomp_alias[0][j]);
-			if (j < (rows - 1)) fprintf(stream, " %s", coalescer.op_token);
 			fprintf(stream, "%s_%s(%s.%c)", vec_nickname, coalescers[coalescer].name, parameter_name_sets[0][0], vcomp_alias[0][j]);
 			if (j < (rows - 1)) {
 				if (coalescer < COALESCER_MIN) fprintf(stream, " %s", coalescers[coalescer].op_token);
