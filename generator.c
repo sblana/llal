@@ -8,7 +8,7 @@
 - func: mat lerp, slerp
 - macro: mat identity constructor
 - macro: vec axis constructor
-- macro: print formatù
+- macro: print format
 - mat constructors
 - conversion
 - rotation, scale, translate?
@@ -79,12 +79,30 @@ struct operator_info {
 	char *op_token;
 };
 
-#define OPERATORS_COUNT 4
+enum Operators {
+	OPERATOR_ADDITION = 0,
+	OPERATOR_SUBTRACTION,
+	OPERATOR_MULTIPLICATION,
+	OPERATOR_DIVISION,
+	OPERATORS_COUNT,
+};
+
 const struct operator_info operators[OPERATORS_COUNT] = {
-	{"add", "+"},
-	{"sub", "-"},
-	{"mul", "*"},
-	{"div", "/"},
+	[OPERATOR_ADDITION] = {"add", "+"},
+	[OPERATOR_SUBTRACTION] = {"sub", "-"},
+	[OPERATOR_MULTIPLICATION] = {"mul", "*"},
+	[OPERATOR_DIVISION] = {"div", "/"},
+};
+
+enum Coalescers {
+	COALESCER_SUM = 0,
+	COALESCER_PRODUCT,
+	COALESCERS_COUNT,
+};
+
+const struct operator_info coalescers[COALESCERS_COUNT] = {
+	[COALESCER_SUM] = {"clesce_sum", "+"},
+	[COALESCER_PRODUCT] = {"clesce_product", "*"},
 };
 
 #define FUNC_MAX_ARITY 4
@@ -373,6 +391,25 @@ void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 }
 
+void gen_func_vector_coalesce(FILE *stream, enum DataType type, size_t rows, struct operator_info coalescer, enum FuncGenPassType pass) {
+	GEN_VECNAME(vec_name, types[type].name, rows)
+	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
+	
+	fprintf(stream, "%s ", types[type].name);
+	fprintf(stream, "%s_%s", vec_nickname, coalescer.name);
+	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
+	END_FUNCDEF(stream)
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn ");
+		for (size_t i = 0; i < rows; i++) {
+			fprintf(stream, "%s.%c", parameter_name_sets[0][0], vcomp_alias[0][i]);
+			if (i < (rows - 1))
+				fprintf(stream, " %s ", coalescer.op_token);
+		}
+		fprintf(stream, ";\n}\n\n");
+	}
+}
+
 void gen_func_vector_dot(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	if (specfuncs[SPECFUNC_DOT_PRODUCT].valid_datatypes[type] == false) return;
 	GEN_VECNAME(vec_name, types[type].name, rows)
@@ -383,10 +420,11 @@ void gen_func_vector_dot(FILE *stream, enum DataType type, size_t rows, enum Fun
 	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
 	if (pass == IMPLEMENTATION) {
-		fprintf(stream, " {\n\treturn %s.x*%s.x", parameter_name_sets[0][0], parameter_name_sets[0][1]);
-		for (size_t j = 1; j < rows; j++)
-			fprintf(stream, " + %s.%c*%s.%c",
-				parameter_name_sets[0][0], vcomp_alias[0][j], parameter_name_sets[0][1], vcomp_alias[0][j]);
+		fprintf(stream, " {\n\treturn ");
+		fprintf(stream, "%s_%s(%s_%s(%s, %s))",
+			vec_nickname, coalescers[COALESCER_SUM].name,
+			vec_nickname, operators[OPERATOR_MULTIPLICATION].name,
+			parameter_name_sets[0][0], parameter_name_sets[0][1]);
 		fprintf(stream, ";\n}\n\n");
 	}
 }
@@ -494,6 +532,26 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 }
 
+void gen_func_matrix_coalesce(FILE *stream, enum DataType type, size_t rows, struct operator_info coalescer, enum FuncGenPassType pass) {
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
+	
+	fprintf(stream, "%s ", types[type].name);
+	fprintf(stream, "%s_%s", mat_nickname, coalescer.name);
+	fprintf(stream, "(%s %s)", mat_name, parameter_name_sets[0][0]);
+	END_FUNCDEF(stream)
+	else if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn (\n\t");
+		for (size_t j = 0; j < rows; j++) {
+			fprintf(stream, "\t");
+			fprintf(stream, "%s_%s(%s.%c)", vec_nickname, coalescer.name, parameter_name_sets[0][0], vcomp_alias[0][j]);
+			if (j < (rows - 1)) fprintf(stream, " %s", coalescer.op_token);
+			fprintf(stream, "\n\t");
+		}
+		fprintf(stream, ");\n}\n\n");
+	}
+}
 void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
@@ -620,6 +678,9 @@ int main() {
 					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass, DIM_VECTOR);
 					gen_func_vector_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
 				}
+				for (size_t coalescer = 0; coalescer < COALESCERS_COUNT; coalescer++) {
+					gen_func_vector_coalesce(stdout, type, n, coalescers[coalescer], pass);
+				}
 				gen_func_vector_dot(stdout, type, n, pass);
 				gen_func_vector_cross(stdout, type, n, pass);
 				gen_func_vector_lensqr(stdout, type, n, pass);
@@ -634,6 +695,9 @@ int main() {
 				for (size_t operator = 0; operator < OPERATORS_COUNT; operator++) {
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_MATRIX);
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
+				}
+				for (size_t coalescer = 0; coalescer < COALESCERS_COUNT; coalescer++) {
+					gen_func_matrix_coalesce(stdout, type, n, coalescers[coalescer], pass);
 				}
 				gen_func_matmult_mat_mat(stdout, type, n, pass);
 				gen_func_matmult_mat_cvec(stdout, type, n, pass);
