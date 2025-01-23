@@ -6,17 +6,16 @@
 - func: vec lerp, slerp
 - func: mat determinant
 - func: mat lerp, slerp
-- macro: mat identity constructor
-- macro: vec axis constructor
+- func: vec axis constructor
 - macro: print format
 - mat constructors
 - conversion
-- rotation, scale, translate?
+- 2d rotation, translate?
 - something with perspective distortions?
 - quaternion?
 - some kind of swizzling? min ~4000 lines via functions.
 - bool vectors?
-- quadruple?
+- quadruple floating point?
 - function inlining?
 - integer matrices?
 - use inttypes.h?
@@ -57,6 +56,15 @@ enum DimensionType {
 	DIM_VECTOR,
 	DIM_MATRIX,
 	DIM_COUNT,
+};
+
+#define V_MAX_COMPS 4
+#define V_COMP_ALIAS_SETS 3
+
+const char vcomp_alias[V_COMP_ALIAS_SETS][V_MAX_COMPS] = {
+	{'x','y','z','w'},
+	{'r','g','b','a'},
+	{'s','t','p','q'},
 };
 
 struct datatype_info {
@@ -121,6 +129,7 @@ struct func_info {
 	char *name_fmt;
 	bool valid_datatypes[DATATYPES_COUNT];
 	size_t arity;
+	bool valid_rows[V_MAX_COMPS+1];
 };
 
 enum SpecFunc {
@@ -130,18 +139,16 @@ enum SpecFunc {
 	SPECFUNC_DOT_PRODUCT,
 	SPECFUNC_CROSS_PRODUCT,
 	SPECFUNC_TRANSPOSE,
+	SPECFUNC_IDENTITY,
+	SPECFUNC_SCALE,
+	SPECFUNC_ROTATE,
+	SPECFUNC_TRANSLATE,
 	SPECFUNCS_COUNT,
 };
 
 const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 	[SPECFUNC_LENGTH_SQUARED] = {
 		.name_fmt = "%s_lensqr",
-		.valid_datatypes = {
-			[DATATYPE_FLOAT]	= true,
-			[DATATYPE_DOUBLE]	= true,
-			[DATATYPE_INT]		= true,
-			[DATATYPE_UNSIGNED] = true,
-		},
 		.arity = 1,
 	},
 	[SPECFUNC_LENGTH] = {
@@ -166,12 +173,6 @@ const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 	},
 	[SPECFUNC_DOT_PRODUCT] = {
 		.name_fmt = "%s_dot",
-		.valid_datatypes = {
-			[DATATYPE_FLOAT]	= true,
-			[DATATYPE_DOUBLE]	= true,
-			[DATATYPE_INT]		= true,
-			[DATATYPE_UNSIGNED] = true,
-		},
 		.arity = 2,
 	},
 	[SPECFUNC_CROSS_PRODUCT] = {
@@ -186,27 +187,53 @@ const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 	},
 	[SPECFUNC_TRANSPOSE] = {
 		.name_fmt = "%s_transpose",
+		.arity = 1,
+	},
+	[SPECFUNC_IDENTITY] = {
+		.name_fmt = "%s_identity",
+		.arity = 0,
+	},
+	[SPECFUNC_SCALE] = {
+		.name_fmt = "%s_scale",
+		.arity = 1,
+	},
+	[SPECFUNC_ROTATE] = {
+		.name_fmt = "%s_rotate",
+		.arity = 2,
 		.valid_datatypes = {
 			[DATATYPE_FLOAT]	= true,
 			[DATATYPE_DOUBLE]	= true,
-			[DATATYPE_INT]		= true,
-			[DATATYPE_UNSIGNED] = true,
+			[DATATYPE_INT]		= false,
+			[DATATYPE_UNSIGNED]	= false,
 		},
+		.valid_rows = {
+			[2] = false,
+			[3] = true,
+			[4] = true,
+		},
+	},
+	[SPECFUNC_TRANSLATE] = {
+		.name_fmt = "%s_translate",
 		.arity = 1,
+		.valid_rows = {
+			[2] = false,
+			[3] = false,
+			[4] = true,
+		},
 	},
 };
 
-const char *parameter_name_sets[][FUNC_MAX_ARITY] = {
-	{"a", "b", "c", "d"},
+enum ParameterNameSet {
+	PARAMNAMESET_ABCD = 0,
+	PARAMNAMESET_VEC_BY,
+	PARAMNAMESET_MAT_BY,
+	PARAMNAMESETS_COUNT,
 };
 
-#define V_MAX_COMPS 4
-#define V_COMP_ALIAS_SETS 3
-
-const char vcomp_alias[V_COMP_ALIAS_SETS][V_MAX_COMPS] = {
-	{'x','y','z','w'},
-	{'r','g','b','a'},
-	{'s','t','p','q'},
+const char *parameter_name_sets[PARAMNAMESETS_COUNT][FUNC_MAX_ARITY] = {
+	[PARAMNAMESET_ABCD] = {"a", "b", "c", "d"},
+	[PARAMNAMESET_VEC_BY] = {"vec", "by"},
+	[PARAMNAMESET_MAT_BY] = {"mat", "by"},
 };
 
 enum FuncGenPassType {
@@ -443,7 +470,6 @@ void gen_func_vector_coalesce(FILE *stream, enum DataType type, size_t rows, enu
 }
 
 void gen_func_vector_dot(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
-	if (specfuncs[SPECFUNC_DOT_PRODUCT].valid_datatypes[type] == false) return;
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
@@ -487,7 +513,6 @@ void gen_func_vector_cross(FILE *stream, enum DataType type, size_t rows, enum F
 }
 
 void gen_func_vector_lensqr(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
-	if (specfuncs[SPECFUNC_LENGTH_SQUARED].valid_datatypes[type] == false) return;
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
@@ -536,6 +561,27 @@ void gen_func_vector_normalize(FILE *stream, enum DataType type, size_t rows, en
 		fprintf(stream, " {\n\treturn %s_div_%s(%s, ", vec_nickname, types[type].nickname, parameter_name_sets[0][0]);
 		fprintf(stream, specfuncs[SPECFUNC_LENGTH].name_fmt, vec_nickname);
 		fprintf(stream, "(%s));\n}\n\n", parameter_name_sets[0][0]);
+	}
+}
+
+void gen_func_matrix_identity(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_IDENTITY].name_fmt, mat_nickname);
+	fprintf(stream, "(void)");
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn (%s){", mat_name);
+		for (size_t j = 0; j < rows; j++) {
+			fprintf(stream, "\n\t\t.%c = {{", vcomp_alias[0][j]);
+			for (size_t i = 0; i < rows; i++) {
+				fprintf(stream, " %c,", j==i ? '1' : '0');
+			}
+			fprintf(stream, " }},");
+		}
+		fprintf(stream, "\n\t};\n}\n\n");
 	}
 }
 
@@ -670,7 +716,6 @@ void gen_func_matmult_rvec_mat(FILE *stream, enum DataType type, size_t rows, en
 }
 
 void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
-	if (specfuncs[SPECFUNC_TRANSPOSE].valid_datatypes[type] == false) return;
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	
@@ -688,6 +733,106 @@ void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, en
 			fprintf(stream, " }},");
 		}
 		fprintf(stream, "\n\t};\n}\n\n");
+	}
+}
+
+void gen_func_matrix_scale(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	GEN_VECNAME(vec_name, types[type].name, rows)
+	
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_SCALE].name_fmt, mat_nickname);
+	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[PARAMNAMESET_MAT_BY][1]);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\t%s mat = {0};", mat_name);
+		for (size_t j = 0; j < rows; j++) {
+			fprintf(stream, "\n\tmat.%c%c = %s.%c;",
+				vcomp_alias[0][j], vcomp_alias[0][j],
+				parameter_name_sets[PARAMNAMESET_MAT_BY][1], vcomp_alias[0][j]);
+		}
+		fprintf(stream, "\n\treturn mat;\n}\n\n");
+	}
+}
+
+void gen_func_matrix_rotate(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	if (specfuncs[SPECFUNC_ROTATE].valid_datatypes[type] == false) return;
+	if (specfuncs[SPECFUNC_ROTATE].valid_rows[rows] == false) return;
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	GEN_VECNAME(vec_name, types[type].name, (size_t)3)
+	
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_ROTATE].name_fmt, mat_nickname);
+	fprintf(stream, "(%s %s, %s %s)",
+		types[type].name, "angle",
+		vec_name, "axis");
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {");
+		fprintf(stream, "\n\t%s cosangle = cos", types[type].name);
+		if (type != DATATYPE_DOUBLE)
+			fprintf(stream, "%c", types[type].func_suffix);
+		fprintf(stream, "(angle);");
+		fprintf(stream, "\n\t%s sinangle = cos", types[type].name);
+		if (type != DATATYPE_DOUBLE)
+			fprintf(stream, "%c", types[type].func_suffix);
+		fprintf(stream, "(angle);");
+		fprintf(stream, "\n\t%s mat = {", mat_name);
+		for (size_t j = 0; j < (size_t)3; j++) {
+			fprintf(stream, "\n\t\t.%c = {{", vcomp_alias[0][j]);
+			for (size_t i = 0; i < (size_t)3; i++) {
+				fprintf(stream, " axis.%c*axis.%c*(1.0-cosangle),", vcomp_alias[0][j], vcomp_alias[0][i]);
+			}
+			if (rows == (size_t)4)
+				fprintf(stream, "0.0, ");
+			fprintf(stream, " }},");
+		}
+		if (rows == (size_t)4)
+			fprintf(stream, "\n\t\t.w = {{ 0.0, 0.0, 0.0, 1.0, }},");
+		fprintf(stream, "\n\t};\n\treturn %s_add(mat, (%s){", mat_nickname, mat_name);
+		for (size_t j = 0; j < (size_t)3; j++) {
+			fprintf(stream, "\n\t\t.%c = {{", vcomp_alias[0][j]);
+			for (size_t i = 0; i < (size_t)3; i++) {
+				if (j==i)
+					fprintf(stream, "         cosangle,");
+				else
+					fprintf(stream, " %caxis.%c*sinangle,", j==((i+1)%3) ? '-' : ' ', vcomp_alias[0][(6-i-j)%3]);
+			}
+			if (rows == (size_t)4)
+				fprintf(stream, "0.0, ");
+			fprintf(stream, " }},");
+		}
+		if (rows == (size_t)4)
+			fprintf(stream, "\n\t\t.w = {{ 0.0, 0.0, 0.0, 0.0, }},");
+		fprintf(stream, "\n\t});\n}\n\n");
+	}
+}
+
+void gen_func_matrix_translate(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	if (specfuncs[SPECFUNC_TRANSLATE].valid_rows[rows] == false) return;
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	GEN_VECNAME(vec_name, types[type].name, rows)
+	GEN_VECNAME(vec_namem1, types[type].name, (rows-1))
+	
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_TRANSLATE].name_fmt, mat_nickname);
+	fprintf(stream, "(%s %s)", vec_namem1, parameter_name_sets[PARAMNAMESET_MAT_BY][1]);
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\t%s mat = {0};", mat_name);
+		for (size_t j = 0; j < (rows - 1); j++) {
+			fprintf(stream, "\n\tmat.%c%c = 1.0;",
+				vcomp_alias[0][j], vcomp_alias[0][j]);
+		}
+		fprintf(stream, "\n\tmat.w = (%s){{ %s.x, %s.y, %s.z, 1.0 }};",
+			vec_name,
+			parameter_name_sets[PARAMNAMESET_MAT_BY][1],
+			parameter_name_sets[PARAMNAMESET_MAT_BY][1],
+			parameter_name_sets[PARAMNAMESET_MAT_BY][1]);
+		fprintf(stream, "\n\treturn mat;\n}\n\n");
 	}
 }
 
@@ -746,6 +891,7 @@ int main() {
 		for (size_t n = 2; n <= V_MAX_COMPS; n++) {
 			for (size_t type = 0; type < DATATYPES_COUNT; type++) {
 				fprintf(stdout, "\n");
+				gen_func_matrix_identity(stdout, type, n, pass);
 				for (size_t operator = 0; operator < OPERATORS_COUNT; operator++) {
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_MATRIX);
 					gen_func_matrix_elementary(stdout, types[type], n, operators[operator], pass, DIM_SCALAR);
@@ -757,6 +903,9 @@ int main() {
 				gen_func_matmult_mat_cvec(stdout, type, n, pass);
 				gen_func_matmult_rvec_mat(stdout, type, n, pass);
 				gen_func_matrix_transpose(stdout, type, n, pass);
+				gen_func_matrix_scale(stdout, type, n, pass);
+				gen_func_matrix_rotate(stdout, type, n, pass);
+				gen_func_matrix_translate(stdout, type, n, pass);
 			}
 		}
 #		ifdef GENERATE_SWIZZLING
