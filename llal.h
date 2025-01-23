@@ -640,6 +640,7 @@ unsigned u4_clesce_max(unsigned4 a);
 unsigned u4_dot(unsigned4 a, unsigned4 b);
 unsigned u4_lensqr(unsigned4 a);
 
+float2x2 f2x2_identity(void);
 float2x2 f2x2_add(float2x2 a, float2x2 b);
 float2x2 f2x2_add_f(float2x2 a, float b);
 float2x2 f2x2_sub(float2x2 a, float2x2 b);
@@ -656,7 +657,9 @@ float2x2 f2x2_matmult_f2x2(float2x2 a, float2x2 b);
 float2 f2x2_matmult_f2c(float2x2 a, float2 b);
 float2 f2r_matmult_f2x2(float2 a, float2x2 b);
 float2x2 f2x2_transpose(float2x2 a);
+float2x2 f2x2_scale(float2 by);
 
+double2x2 d2x2_identity(void);
 double2x2 d2x2_add(double2x2 a, double2x2 b);
 double2x2 d2x2_add_d(double2x2 a, double b);
 double2x2 d2x2_sub(double2x2 a, double2x2 b);
@@ -673,7 +676,9 @@ double2x2 d2x2_matmult_d2x2(double2x2 a, double2x2 b);
 double2 d2x2_matmult_d2c(double2x2 a, double2 b);
 double2 d2r_matmult_d2x2(double2 a, double2x2 b);
 double2x2 d2x2_transpose(double2x2 a);
+double2x2 d2x2_scale(double2 by);
 
+int2x2 i2x2_identity(void);
 int2x2 i2x2_add(int2x2 a, int2x2 b);
 int2x2 i2x2_add_i(int2x2 a, int b);
 int2x2 i2x2_sub(int2x2 a, int2x2 b);
@@ -690,7 +695,9 @@ int2x2 i2x2_matmult_i2x2(int2x2 a, int2x2 b);
 int2 i2x2_matmult_i2c(int2x2 a, int2 b);
 int2 i2r_matmult_i2x2(int2 a, int2x2 b);
 int2x2 i2x2_transpose(int2x2 a);
+int2x2 i2x2_scale(int2 by);
 
+unsigned2x2 u2x2_identity(void);
 unsigned2x2 u2x2_add(unsigned2x2 a, unsigned2x2 b);
 unsigned2x2 u2x2_add_u(unsigned2x2 a, unsigned b);
 unsigned2x2 u2x2_sub(unsigned2x2 a, unsigned2x2 b);
@@ -707,7 +714,9 @@ unsigned2x2 u2x2_matmult_u2x2(unsigned2x2 a, unsigned2x2 b);
 unsigned2 u2x2_matmult_u2c(unsigned2x2 a, unsigned2 b);
 unsigned2 u2r_matmult_u2x2(unsigned2 a, unsigned2x2 b);
 unsigned2x2 u2x2_transpose(unsigned2x2 a);
+unsigned2x2 u2x2_scale(unsigned2 by);
 
+float3x3 f3x3_identity(void);
 float3x3 f3x3_add(float3x3 a, float3x3 b);
 float3x3 f3x3_add_f(float3x3 a, float b);
 float3x3 f3x3_sub(float3x3 a, float3x3 b);
@@ -724,7 +733,10 @@ float3x3 f3x3_matmult_f3x3(float3x3 a, float3x3 b);
 float3 f3x3_matmult_f3c(float3x3 a, float3 b);
 float3 f3r_matmult_f3x3(float3 a, float3x3 b);
 float3x3 f3x3_transpose(float3x3 a);
+float3x3 f3x3_scale(float3 by);
+float3x3 f3x3_rotate(float angle, float3 axis);
 
+double3x3 d3x3_identity(void);
 double3x3 d3x3_add(double3x3 a, double3x3 b);
 double3x3 d3x3_add_d(double3x3 a, double b);
 double3x3 d3x3_sub(double3x3 a, double3x3 b);
@@ -741,7 +753,10 @@ double3x3 d3x3_matmult_d3x3(double3x3 a, double3x3 b);
 double3 d3x3_matmult_d3c(double3x3 a, double3 b);
 double3 d3r_matmult_d3x3(double3 a, double3x3 b);
 double3x3 d3x3_transpose(double3x3 a);
+double3x3 d3x3_scale(double3 by);
+double3x3 d3x3_rotate(double angle, double3 axis);
 
+int3x3 i3x3_identity(void);
 int3x3 i3x3_add(int3x3 a, int3x3 b);
 int3x3 i3x3_add_i(int3x3 a, int b);
 int3x3 i3x3_sub(int3x3 a, int3x3 b);
@@ -758,7 +773,9 @@ int3x3 i3x3_matmult_i3x3(int3x3 a, int3x3 b);
 int3 i3x3_matmult_i3c(int3x3 a, int3 b);
 int3 i3r_matmult_i3x3(int3 a, int3x3 b);
 int3x3 i3x3_transpose(int3x3 a);
+int3x3 i3x3_scale(int3 by);
 
+unsigned3x3 u3x3_identity(void);
 unsigned3x3 u3x3_add(unsigned3x3 a, unsigned3x3 b);
 unsigned3x3 u3x3_add_u(unsigned3x3 a, unsigned b);
 unsigned3x3 u3x3_sub(unsigned3x3 a, unsigned3x3 b);
@@ -775,7 +792,9 @@ unsigned3x3 u3x3_matmult_u3x3(unsigned3x3 a, unsigned3x3 b);
 unsigned3 u3x3_matmult_u3c(unsigned3x3 a, unsigned3 b);
 unsigned3 u3r_matmult_u3x3(unsigned3 a, unsigned3x3 b);
 unsigned3x3 u3x3_transpose(unsigned3x3 a);
+unsigned3x3 u3x3_scale(unsigned3 by);
 
+float4x4 f4x4_identity(void);
 float4x4 f4x4_add(float4x4 a, float4x4 b);
 float4x4 f4x4_add_f(float4x4 a, float b);
 float4x4 f4x4_sub(float4x4 a, float4x4 b);
@@ -792,7 +811,11 @@ float4x4 f4x4_matmult_f4x4(float4x4 a, float4x4 b);
 float4 f4x4_matmult_f4c(float4x4 a, float4 b);
 float4 f4r_matmult_f4x4(float4 a, float4x4 b);
 float4x4 f4x4_transpose(float4x4 a);
+float4x4 f4x4_scale(float4 by);
+float4x4 f4x4_rotate(float angle, float3 axis);
+float4x4 f4x4_translate(float3 by);
 
+double4x4 d4x4_identity(void);
 double4x4 d4x4_add(double4x4 a, double4x4 b);
 double4x4 d4x4_add_d(double4x4 a, double b);
 double4x4 d4x4_sub(double4x4 a, double4x4 b);
@@ -809,7 +832,11 @@ double4x4 d4x4_matmult_d4x4(double4x4 a, double4x4 b);
 double4 d4x4_matmult_d4c(double4x4 a, double4 b);
 double4 d4r_matmult_d4x4(double4 a, double4x4 b);
 double4x4 d4x4_transpose(double4x4 a);
+double4x4 d4x4_scale(double4 by);
+double4x4 d4x4_rotate(double angle, double3 axis);
+double4x4 d4x4_translate(double3 by);
 
+int4x4 i4x4_identity(void);
 int4x4 i4x4_add(int4x4 a, int4x4 b);
 int4x4 i4x4_add_i(int4x4 a, int b);
 int4x4 i4x4_sub(int4x4 a, int4x4 b);
@@ -826,7 +853,10 @@ int4x4 i4x4_matmult_i4x4(int4x4 a, int4x4 b);
 int4 i4x4_matmult_i4c(int4x4 a, int4 b);
 int4 i4r_matmult_i4x4(int4 a, int4x4 b);
 int4x4 i4x4_transpose(int4x4 a);
+int4x4 i4x4_scale(int4 by);
+int4x4 i4x4_translate(int3 by);
 
+unsigned4x4 u4x4_identity(void);
 unsigned4x4 u4x4_add(unsigned4x4 a, unsigned4x4 b);
 unsigned4x4 u4x4_add_u(unsigned4x4 a, unsigned b);
 unsigned4x4 u4x4_sub(unsigned4x4 a, unsigned4x4 b);
@@ -843,6 +873,8 @@ unsigned4x4 u4x4_matmult_u4x4(unsigned4x4 a, unsigned4x4 b);
 unsigned4 u4x4_matmult_u4c(unsigned4x4 a, unsigned4 b);
 unsigned4 u4r_matmult_u4x4(unsigned4 a, unsigned4x4 b);
 unsigned4x4 u4x4_transpose(unsigned4x4 a);
+unsigned4x4 u4x4_scale(unsigned4 by);
+unsigned4x4 u4x4_translate(unsigned3 by);
 
 
 #ifdef LLAL_IMPLEMENTATION
@@ -2091,6 +2123,13 @@ unsigned u4_lensqr(unsigned4 a) {
 }
 
 
+float2x2 f2x2_identity(void) {
+	return (float2x2){
+		.x = {{ 1, 0, }},
+		.y = {{ 0, 1, }},
+	};
+}
+
 float2x2 f2x2_add(float2x2 a, float2x2 b) {
 	for (unsigned j = 0; j < 2; j++)
 		for (unsigned i = 0; i < 2; i++)
@@ -2208,6 +2247,20 @@ float2x2 f2x2_transpose(float2x2 a) {
 	};
 }
 
+float2x2 f2x2_scale(float2 by) {
+	float2x2 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	return mat;
+}
+
+
+double2x2 d2x2_identity(void) {
+	return (double2x2){
+		.x = {{ 1, 0, }},
+		.y = {{ 0, 1, }},
+	};
+}
 
 double2x2 d2x2_add(double2x2 a, double2x2 b) {
 	for (unsigned j = 0; j < 2; j++)
@@ -2326,6 +2379,20 @@ double2x2 d2x2_transpose(double2x2 a) {
 	};
 }
 
+double2x2 d2x2_scale(double2 by) {
+	double2x2 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	return mat;
+}
+
+
+int2x2 i2x2_identity(void) {
+	return (int2x2){
+		.x = {{ 1, 0, }},
+		.y = {{ 0, 1, }},
+	};
+}
 
 int2x2 i2x2_add(int2x2 a, int2x2 b) {
 	for (unsigned j = 0; j < 2; j++)
@@ -2444,6 +2511,20 @@ int2x2 i2x2_transpose(int2x2 a) {
 	};
 }
 
+int2x2 i2x2_scale(int2 by) {
+	int2x2 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	return mat;
+}
+
+
+unsigned2x2 u2x2_identity(void) {
+	return (unsigned2x2){
+		.x = {{ 1, 0, }},
+		.y = {{ 0, 1, }},
+	};
+}
 
 unsigned2x2 u2x2_add(unsigned2x2 a, unsigned2x2 b) {
 	for (unsigned j = 0; j < 2; j++)
@@ -2562,6 +2643,21 @@ unsigned2x2 u2x2_transpose(unsigned2x2 a) {
 	};
 }
 
+unsigned2x2 u2x2_scale(unsigned2 by) {
+	unsigned2x2 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	return mat;
+}
+
+
+float3x3 f3x3_identity(void) {
+	return (float3x3){
+		.x = {{ 1, 0, 0, }},
+		.y = {{ 0, 1, 0, }},
+		.z = {{ 0, 0, 1, }},
+	};
+}
 
 float3x3 f3x3_add(float3x3 a, float3x3 b) {
 	for (unsigned j = 0; j < 3; j++)
@@ -2687,6 +2783,37 @@ float3x3 f3x3_transpose(float3x3 a) {
 	};
 }
 
+float3x3 f3x3_scale(float3 by) {
+	float3x3 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	return mat;
+}
+
+float3x3 f3x3_rotate(float angle, float3 axis) {
+	float cosangle = cosf(angle);
+	float sinangle = cosf(angle);
+	float3x3 mat = {
+		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle), }},
+		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle), }},
+		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle), }},
+	};
+	return f3x3_add(mat, (float3x3){
+		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle, }},
+		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle, }},
+		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle, }},
+	});
+}
+
+
+double3x3 d3x3_identity(void) {
+	return (double3x3){
+		.x = {{ 1, 0, 0, }},
+		.y = {{ 0, 1, 0, }},
+		.z = {{ 0, 0, 1, }},
+	};
+}
 
 double3x3 d3x3_add(double3x3 a, double3x3 b) {
 	for (unsigned j = 0; j < 3; j++)
@@ -2812,6 +2939,37 @@ double3x3 d3x3_transpose(double3x3 a) {
 	};
 }
 
+double3x3 d3x3_scale(double3 by) {
+	double3x3 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	return mat;
+}
+
+double3x3 d3x3_rotate(double angle, double3 axis) {
+	double cosangle = cos(angle);
+	double sinangle = cos(angle);
+	double3x3 mat = {
+		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle), }},
+		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle), }},
+		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle), }},
+	};
+	return d3x3_add(mat, (double3x3){
+		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle, }},
+		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle, }},
+		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle, }},
+	});
+}
+
+
+int3x3 i3x3_identity(void) {
+	return (int3x3){
+		.x = {{ 1, 0, 0, }},
+		.y = {{ 0, 1, 0, }},
+		.z = {{ 0, 0, 1, }},
+	};
+}
 
 int3x3 i3x3_add(int3x3 a, int3x3 b) {
 	for (unsigned j = 0; j < 3; j++)
@@ -2937,6 +3095,22 @@ int3x3 i3x3_transpose(int3x3 a) {
 	};
 }
 
+int3x3 i3x3_scale(int3 by) {
+	int3x3 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	return mat;
+}
+
+
+unsigned3x3 u3x3_identity(void) {
+	return (unsigned3x3){
+		.x = {{ 1, 0, 0, }},
+		.y = {{ 0, 1, 0, }},
+		.z = {{ 0, 0, 1, }},
+	};
+}
 
 unsigned3x3 u3x3_add(unsigned3x3 a, unsigned3x3 b) {
 	for (unsigned j = 0; j < 3; j++)
@@ -3062,6 +3236,23 @@ unsigned3x3 u3x3_transpose(unsigned3x3 a) {
 	};
 }
 
+unsigned3x3 u3x3_scale(unsigned3 by) {
+	unsigned3x3 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	return mat;
+}
+
+
+float4x4 f4x4_identity(void) {
+	return (float4x4){
+		.x = {{ 1, 0, 0, 0, }},
+		.y = {{ 0, 1, 0, 0, }},
+		.z = {{ 0, 0, 1, 0, }},
+		.w = {{ 0, 0, 0, 1, }},
+	};
+}
 
 float4x4 f4x4_add(float4x4 a, float4x4 b) {
 	for (unsigned j = 0; j < 4; j++)
@@ -3194,6 +3385,50 @@ float4x4 f4x4_transpose(float4x4 a) {
 	};
 }
 
+float4x4 f4x4_scale(float4 by) {
+	float4x4 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	mat.ww = by.w;
+	return mat;
+}
+
+float4x4 f4x4_rotate(float angle, float3 axis) {
+	float cosangle = cosf(angle);
+	float sinangle = cosf(angle);
+	float4x4 mat = {
+		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle),0.0,  }},
+		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle),0.0,  }},
+		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle),0.0,  }},
+		.w = {{ 0.0, 0.0, 0.0, 1.0, }},
+	};
+	return f4x4_add(mat, (float4x4){
+		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle,0.0,  }},
+		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle,0.0,  }},
+		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle,0.0,  }},
+		.w = {{ 0.0, 0.0, 0.0, 0.0, }},
+	});
+}
+
+float4x4 f4x4_translate(float3 by) {
+	float4x4 mat = {0};
+	mat.xx = 1.0;
+	mat.yy = 1.0;
+	mat.zz = 1.0;
+	mat.w = (float4){{ by.x, by.y, by.z, 1.0 }};
+	return mat;
+}
+
+
+double4x4 d4x4_identity(void) {
+	return (double4x4){
+		.x = {{ 1, 0, 0, 0, }},
+		.y = {{ 0, 1, 0, 0, }},
+		.z = {{ 0, 0, 1, 0, }},
+		.w = {{ 0, 0, 0, 1, }},
+	};
+}
 
 double4x4 d4x4_add(double4x4 a, double4x4 b) {
 	for (unsigned j = 0; j < 4; j++)
@@ -3326,6 +3561,50 @@ double4x4 d4x4_transpose(double4x4 a) {
 	};
 }
 
+double4x4 d4x4_scale(double4 by) {
+	double4x4 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	mat.ww = by.w;
+	return mat;
+}
+
+double4x4 d4x4_rotate(double angle, double3 axis) {
+	double cosangle = cos(angle);
+	double sinangle = cos(angle);
+	double4x4 mat = {
+		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle),0.0,  }},
+		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle),0.0,  }},
+		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle),0.0,  }},
+		.w = {{ 0.0, 0.0, 0.0, 1.0, }},
+	};
+	return d4x4_add(mat, (double4x4){
+		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle,0.0,  }},
+		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle,0.0,  }},
+		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle,0.0,  }},
+		.w = {{ 0.0, 0.0, 0.0, 0.0, }},
+	});
+}
+
+double4x4 d4x4_translate(double3 by) {
+	double4x4 mat = {0};
+	mat.xx = 1.0;
+	mat.yy = 1.0;
+	mat.zz = 1.0;
+	mat.w = (double4){{ by.x, by.y, by.z, 1.0 }};
+	return mat;
+}
+
+
+int4x4 i4x4_identity(void) {
+	return (int4x4){
+		.x = {{ 1, 0, 0, 0, }},
+		.y = {{ 0, 1, 0, 0, }},
+		.z = {{ 0, 0, 1, 0, }},
+		.w = {{ 0, 0, 0, 1, }},
+	};
+}
 
 int4x4 i4x4_add(int4x4 a, int4x4 b) {
 	for (unsigned j = 0; j < 4; j++)
@@ -3458,6 +3737,33 @@ int4x4 i4x4_transpose(int4x4 a) {
 	};
 }
 
+int4x4 i4x4_scale(int4 by) {
+	int4x4 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	mat.ww = by.w;
+	return mat;
+}
+
+int4x4 i4x4_translate(int3 by) {
+	int4x4 mat = {0};
+	mat.xx = 1.0;
+	mat.yy = 1.0;
+	mat.zz = 1.0;
+	mat.w = (int4){{ by.x, by.y, by.z, 1.0 }};
+	return mat;
+}
+
+
+unsigned4x4 u4x4_identity(void) {
+	return (unsigned4x4){
+		.x = {{ 1, 0, 0, 0, }},
+		.y = {{ 0, 1, 0, 0, }},
+		.z = {{ 0, 0, 1, 0, }},
+		.w = {{ 0, 0, 0, 1, }},
+	};
+}
 
 unsigned4x4 u4x4_add(unsigned4x4 a, unsigned4x4 b) {
 	for (unsigned j = 0; j < 4; j++)
@@ -3588,6 +3894,24 @@ unsigned4x4 u4x4_transpose(unsigned4x4 a) {
 		.z = {{ a.xz, a.yz, a.zz, a.wz, }},
 		.w = {{ a.xw, a.yw, a.zw, a.ww, }},
 	};
+}
+
+unsigned4x4 u4x4_scale(unsigned4 by) {
+	unsigned4x4 mat = {0};
+	mat.xx = by.x;
+	mat.yy = by.y;
+	mat.zz = by.z;
+	mat.ww = by.w;
+	return mat;
+}
+
+unsigned4x4 u4x4_translate(unsigned3 by) {
+	unsigned4x4 mat = {0};
+	mat.xx = 1.0;
+	mat.yy = 1.0;
+	mat.zz = 1.0;
+	mat.w = (unsigned4){{ by.x, by.y, by.z, 1.0 }};
+	return mat;
 }
 
 #endif // ifdef LLAL_IMPLEMENTATION
