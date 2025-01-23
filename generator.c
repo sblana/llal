@@ -775,7 +775,7 @@ void gen_func_matrix_rotate(FILE *stream, enum DataType type, size_t rows, enum 
 		if (type != DATATYPE_DOUBLE)
 			fprintf(stream, "%c", types[type].func_suffix);
 		fprintf(stream, "(angle);");
-		fprintf(stream, "\n\t%s sinangle = cos", types[type].name);
+		fprintf(stream, "\n\t%s sinangle = sin", types[type].name);
 		if (type != DATATYPE_DOUBLE)
 			fprintf(stream, "%c", types[type].func_suffix);
 		fprintf(stream, "(angle);");
