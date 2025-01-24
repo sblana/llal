@@ -16,7 +16,6 @@
 - some kind of swizzling? min ~4000 lines via functions.
 - bool vectors?
 - quadruple floating point?
-- function inlining?
 - integer matrices?
 - use inttypes.h?
 - shorter type names e.g. f3 vs float3, d4x4 vs double4x4?
@@ -39,6 +38,8 @@
 #define USE_MINMAX_MACRO
 // Generates roughly 2000 swizzling functions.
 // #define GENERATE_SWIZZLING
+
+#define INLINE_FUNC(stream) fprintf(stream, "LLAL_INLINE ");
 
 #define GEN_VECNAME(name, str, N) char name[strlen(str)+2]; \
 								  sprintf(name, "%s%zu", str, N); \
@@ -326,6 +327,7 @@ void gen_ctor_vector(FILE *stream, struct datatype_info type, size_t rows, enum 
 				param_names[param][param_rows[param]] = '\0';
 			}
 			
+			INLINE_FUNC(stream)
 			// writing return type and func symbol
 			fprintf(stream, "%s %s_ctor_",
 				vec_name, vec_nickname);
@@ -381,6 +383,7 @@ void gen_swizzle_vector(FILE *stream, struct datatype_info type, size_t rows, en
 				temp /= rows;
 			}
 			
+			INLINE_FUNC(stream)
 			// writing return type and func symbol
 			fprintf(stream, "%s %s_",
 				ret_name, vec_nickname);
@@ -416,6 +419,7 @@ void gen_func_vector_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 	else if (b_dimtype != DIM_VECTOR) return;
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s %s_%s", vec_name, vec_nickname, operator.name);
 	if (b_dimtype == DIM_SCALAR) fprintf(stream, "_%s", b_nickname);
 	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], b_name, parameter_name_sets[0][1]);
@@ -432,6 +436,7 @@ void gen_func_vector_coalesce(FILE *stream, enum DataType type, size_t rows, enu
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", types[type].name);
 	fprintf(stream, "%s_%s", vec_nickname, coalescers[coalescer].name);
 	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
@@ -473,6 +478,7 @@ void gen_func_vector_dot(FILE *stream, enum DataType type, size_t rows, enum Fun
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", types[type].name);
 	fprintf(stream, specfuncs[SPECFUNC_DOT_PRODUCT].name_fmt, vec_nickname);
 	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
@@ -493,6 +499,7 @@ void gen_func_vector_cross(FILE *stream, enum DataType type, size_t rows, enum F
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", vec_name);
 	fprintf(stream, specfuncs[SPECFUNC_CROSS_PRODUCT].name_fmt, vec_nickname);
 	fprintf(stream, "(%s %s, %s %s)", vec_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
@@ -516,6 +523,7 @@ void gen_func_vector_lensqr(FILE *stream, enum DataType type, size_t rows, enum 
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", types[type].name);
 	fprintf(stream, specfuncs[SPECFUNC_LENGTH_SQUARED].name_fmt, vec_nickname);
 	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
@@ -534,6 +542,7 @@ void gen_func_vector_len(FILE *stream, enum DataType type, size_t rows, enum Fun
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", types[type].name);
 	fprintf(stream, specfuncs[SPECFUNC_LENGTH].name_fmt, vec_nickname);
 	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
@@ -553,6 +562,7 @@ void gen_func_vector_normalize(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", vec_name);
 	fprintf(stream, specfuncs[SPECFUNC_NORMALIZE].name_fmt, vec_nickname);
 	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[0][0]);
@@ -568,6 +578,7 @@ void gen_func_matrix_identity(FILE *stream, enum DataType type, size_t rows, enu
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", mat_name);
 	fprintf(stream, specfuncs[SPECFUNC_IDENTITY].name_fmt, mat_nickname);
 	fprintf(stream, "(void)");
@@ -597,6 +608,7 @@ void gen_func_matrix_elementary(FILE *stream, struct datatype_info type, size_t 
 	}
 	else if (b_dimtype != DIM_MATRIX) return;
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s %s_%s", mat_name, mat_nickname, operator.name);
 	if (b_dimtype == DIM_SCALAR) fprintf(stream, "_%s", b_nickname);
 	fprintf(stream, "(%s %s, %s %s)", mat_name, parameter_name_sets[0][0], b_name, parameter_name_sets[0][1]);
@@ -615,6 +627,7 @@ void gen_func_matrix_coalesce(FILE *stream, enum DataType type, size_t rows, enu
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", types[type].name);
 	fprintf(stream, "%s_%s", mat_nickname, coalescers[coalescer].name);
 	fprintf(stream, "(%s %s)", mat_name, parameter_name_sets[0][0]);
@@ -646,6 +659,8 @@ void gen_func_matrix_coalesce(FILE *stream, enum DataType type, size_t rows, enu
 void gen_func_matmult_mat_mat(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s %s_matmult_%s(%s %s, %s %s)",
 		mat_name, mat_nickname, mat_nickname, mat_name, parameter_name_sets[0][0], mat_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
@@ -670,6 +685,8 @@ void gen_func_matmult_mat_cvec(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s %s_matmult_%sc(%s %s, %s %s)",
 		vec_name, mat_nickname, vec_nickname, mat_name, parameter_name_sets[0][0], vec_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
@@ -701,6 +718,8 @@ void gen_func_matmult_rvec_mat(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_nickname, types[type].nickname, rows)
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s %sr_matmult_%s(%s %s, %s %s)",
 		vec_name, vec_nickname, mat_nickname, vec_name, parameter_name_sets[0][0], mat_name, parameter_name_sets[0][1]);
 	END_FUNCDEF(stream)
@@ -719,6 +738,7 @@ void gen_func_matrix_transpose(FILE *stream, enum DataType type, size_t rows, en
 	GEN_MATNAME(mat_name, types[type].name, rows)
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", mat_name);
 	fprintf(stream, specfuncs[SPECFUNC_TRANSPOSE].name_fmt, mat_nickname);
 	fprintf(stream, "(%s %s)", mat_name, parameter_name_sets[0][0]);
@@ -741,6 +761,7 @@ void gen_func_matrix_scale(FILE *stream, enum DataType type, size_t rows, enum F
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", mat_name);
 	fprintf(stream, specfuncs[SPECFUNC_SCALE].name_fmt, mat_nickname);
 	fprintf(stream, "(%s %s)", vec_name, parameter_name_sets[PARAMNAMESET_MAT_BY][1]);
@@ -763,6 +784,7 @@ void gen_func_matrix_rotate(FILE *stream, enum DataType type, size_t rows, enum 
 	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
 	GEN_VECNAME(vec_name, types[type].name, (size_t)3)
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", mat_name);
 	fprintf(stream, specfuncs[SPECFUNC_ROTATE].name_fmt, mat_nickname);
 	fprintf(stream, "(%s %s, %s %s)",
@@ -817,6 +839,7 @@ void gen_func_matrix_translate(FILE *stream, enum DataType type, size_t rows, en
 	GEN_VECNAME(vec_name, types[type].name, rows)
 	GEN_VECNAME(vec_namem1, types[type].name, (rows-1))
 	
+	INLINE_FUNC(stream)
 	fprintf(stream, "%s ", mat_name);
 	fprintf(stream, specfuncs[SPECFUNC_TRANSLATE].name_fmt, mat_nickname);
 	fprintf(stream, "(%s %s)", vec_namem1, parameter_name_sets[PARAMNAMESET_MAT_BY][1]);
@@ -842,6 +865,12 @@ int main() {
 		"#define LLAL_H\n"
 		"\n"
 		"#include <math.h>\n"
+		"\n"
+		"#ifdef LLAL_USE_STATIC_INLINE\n"
+		"#define LLAL_INLINE static inline\n"
+		"#else\n"
+		"#define LLAL_INLINE\n"
+		"#endif\n"
 #ifdef USE_MINMAX_MACRO
 		"\n"
 		"#ifndef MIN\n"
@@ -863,8 +892,17 @@ int main() {
 			gen_def_matrix(stdout, types[type].name, n);
 	}
 	for (enum FuncGenPassType pass = DEFINITION; pass <= IMPLEMENTATION; pass++) {
+		if (pass == DEFINITION)
+			fprintf(stdout,
+				"\n"
+				"#ifndef LLAL_USE_STATIC_INLINE\n");
 		if (pass == IMPLEMENTATION)
-			fprintf(stdout, "\n#ifdef LLAL_IMPLEMENTATION\n");
+			fprintf(stdout,
+				"#elif !defined LLAL_IMPLEMENTATION\n"
+				"#define LLAL_IMPLEMENTATION\n"
+				"#endif // LLAL_USE_STATIC_INLINE\n"
+				"\n"
+				"#ifdef LLAL_IMPLEMENTATION\n");
 		// Scalar functions
 		// for (size_t type = 0; type < DATATYPES_COUNT; type++) {
 		// }
