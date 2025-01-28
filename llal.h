@@ -5,6 +5,9 @@
 
 #ifdef LLAL_USE_STATIC_INLINE
 #define LLAL_INLINE static inline
+#if !defined LLAL_IMPLEMENTATION
+#define LLAL_IMPLEMENTATION
+#endif
 #else
 #define LLAL_INLINE
 #endif
@@ -884,9 +887,7 @@ LLAL_INLINE unsigned4x4 u4x4_transpose(unsigned4x4 a);
 LLAL_INLINE unsigned4x4 u4x4_scale(unsigned4 by);
 LLAL_INLINE unsigned4x4 u4x4_translate(unsigned3 by);
 
-#elif !defined LLAL_IMPLEMENTATION
-#define LLAL_IMPLEMENTATION
-#endif // LLAL_USE_STATIC_INLINE
+#endif // !LLAL_USE_STATIC_INLINE
 
 #ifdef LLAL_IMPLEMENTATION
 
@@ -2806,9 +2807,9 @@ LLAL_INLINE float3x3 f3x3_rotate(float angle, float3 axis) {
 	float cosangle = cosf(angle);
 	float sinangle = sinf(angle);
 	float3x3 mat = {
-		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle), }},
-		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle), }},
-		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle), }},
+		.x = {{ axis.x*axis.x*(1.0f-cosangle), axis.x*axis.y*(1.0f-cosangle), axis.x*axis.z*(1.0f-cosangle), }},
+		.y = {{ axis.y*axis.x*(1.0f-cosangle), axis.y*axis.y*(1.0f-cosangle), axis.y*axis.z*(1.0f-cosangle), }},
+		.z = {{ axis.z*axis.x*(1.0f-cosangle), axis.z*axis.y*(1.0f-cosangle), axis.z*axis.z*(1.0f-cosangle), }},
 	};
 	return f3x3_add(mat, (float3x3){
 		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle, }},
@@ -3409,16 +3410,16 @@ LLAL_INLINE float4x4 f4x4_rotate(float angle, float3 axis) {
 	float cosangle = cosf(angle);
 	float sinangle = sinf(angle);
 	float4x4 mat = {
-		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle),0.0,  }},
-		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle),0.0,  }},
-		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle),0.0,  }},
-		.w = {{ 0.0, 0.0, 0.0, 1.0, }},
+		.x = {{ axis.x*axis.x*(1.0f-cosangle), axis.x*axis.y*(1.0f-cosangle), axis.x*axis.z*(1.0f-cosangle), 0.0f, }},
+		.y = {{ axis.y*axis.x*(1.0f-cosangle), axis.y*axis.y*(1.0f-cosangle), axis.y*axis.z*(1.0f-cosangle), 0.0f, }},
+		.z = {{ axis.z*axis.x*(1.0f-cosangle), axis.z*axis.y*(1.0f-cosangle), axis.z*axis.z*(1.0f-cosangle), 0.0f, }},
+		.w = {{ 0.0f, 0.0f, 0.0f, 1.0f, }},
 	};
 	return f4x4_add(mat, (float4x4){
-		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle,0.0,  }},
-		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle,0.0,  }},
-		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle,0.0,  }},
-		.w = {{ 0.0, 0.0, 0.0, 0.0, }},
+		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle, 0.0f, }},
+		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle, 0.0f, }},
+		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle, 0.0f, }},
+		.w = {{ 0.0f, 0.0f, 0.0f, 0.0f, }},
 	});
 }
 
@@ -3585,15 +3586,15 @@ LLAL_INLINE double4x4 d4x4_rotate(double angle, double3 axis) {
 	double cosangle = cos(angle);
 	double sinangle = sin(angle);
 	double4x4 mat = {
-		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle),0.0,  }},
-		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle),0.0,  }},
-		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle),0.0,  }},
+		.x = {{ axis.x*axis.x*(1.0-cosangle), axis.x*axis.y*(1.0-cosangle), axis.x*axis.z*(1.0-cosangle), 0.0, }},
+		.y = {{ axis.y*axis.x*(1.0-cosangle), axis.y*axis.y*(1.0-cosangle), axis.y*axis.z*(1.0-cosangle), 0.0, }},
+		.z = {{ axis.z*axis.x*(1.0-cosangle), axis.z*axis.y*(1.0-cosangle), axis.z*axis.z*(1.0-cosangle), 0.0, }},
 		.w = {{ 0.0, 0.0, 0.0, 1.0, }},
 	};
 	return d4x4_add(mat, (double4x4){
-		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle,0.0,  }},
-		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle,0.0,  }},
-		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle,0.0,  }},
+		.x = {{         cosangle,  axis.z*sinangle, -axis.y*sinangle, 0.0, }},
+		.y = {{ -axis.z*sinangle,         cosangle,  axis.x*sinangle, 0.0, }},
+		.z = {{  axis.y*sinangle, -axis.x*sinangle,         cosangle, 0.0, }},
 		.w = {{ 0.0, 0.0, 0.0, 0.0, }},
 	});
 }
