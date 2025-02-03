@@ -825,6 +825,9 @@ LLAL_INLINE float4x4 f4x4_transpose(float4x4 a);
 LLAL_INLINE float4x4 f4x4_scale(float4 by);
 LLAL_INLINE float4x4 f4x4_rotate(float angle, float3 axis);
 LLAL_INLINE float4x4 f4x4_translate(float3 by);
+LLAL_INLINE float4x4 f4x4_perspective(float right, float left, float top, float bot, float far, float near);
+LLAL_INLINE float4x4 f4x4_perspective_vfov(float fov, float aspect_ratio, float far, float near);
+LLAL_INLINE float4x4 f4x4_perspective_hfov(float fov, float aspect_ratio, float far, float near);
 
 LLAL_INLINE double4x4 d4x4_identity(void);
 LLAL_INLINE double4x4 d4x4_add(double4x4 a, double4x4 b);
@@ -846,6 +849,9 @@ LLAL_INLINE double4x4 d4x4_transpose(double4x4 a);
 LLAL_INLINE double4x4 d4x4_scale(double4 by);
 LLAL_INLINE double4x4 d4x4_rotate(double angle, double3 axis);
 LLAL_INLINE double4x4 d4x4_translate(double3 by);
+LLAL_INLINE double4x4 d4x4_perspective(double right, double left, double top, double bot, double far, double near);
+LLAL_INLINE double4x4 d4x4_perspective_vfov(double fov, double aspect_ratio, double far, double near);
+LLAL_INLINE double4x4 d4x4_perspective_hfov(double fov, double aspect_ratio, double far, double near);
 
 LLAL_INLINE int4x4 i4x4_identity(void);
 LLAL_INLINE int4x4 i4x4_add(int4x4 a, int4x4 b);
@@ -3432,6 +3438,27 @@ LLAL_INLINE float4x4 f4x4_translate(float3 by) {
 	return mat;
 }
 
+LLAL_INLINE float4x4 f4x4_perspective(float right, float left, float top, float bot, float far, float near) {
+	return (float4x4){
+		.x = {{       2*near/(right-left),                   0,                      0,  0, }},
+		.y = {{                         0,    2*near/(top-bot),                      0,  0, }},
+		.z = {{ (right+left)/(right-left), (top+bot)/(top-bot), -(far+near)/(far-near), -1, }},
+		.w = {{                         0,                   0, -2*far*near/(far-near),  0, }},
+	};
+}
+
+LLAL_INLINE float4x4 f4x4_perspective_vfov(float fov, float aspect_ratio, float far, float near) {
+	float t = tanf(fov/2)*near;
+	float r = t*aspect_ratio;
+	return f4x4_perspective(r, -r, t, -t, far, near);
+}
+
+LLAL_INLINE float4x4 f4x4_perspective_hfov(float fov, float aspect_ratio, float far, float near) {
+	float r = tanf(fov/2)*near;
+	float t = r/aspect_ratio;
+	return f4x4_perspective(r, -r, t, -t, far, near);
+}
+
 
 LLAL_INLINE double4x4 d4x4_identity(void) {
 	return (double4x4){
@@ -3606,6 +3633,27 @@ LLAL_INLINE double4x4 d4x4_translate(double3 by) {
 	mat.zz = 1.0;
 	mat.w = (double4){{ by.x, by.y, by.z, 1.0 }};
 	return mat;
+}
+
+LLAL_INLINE double4x4 d4x4_perspective(double right, double left, double top, double bot, double far, double near) {
+	return (double4x4){
+		.x = {{       2*near/(right-left),                   0,                      0,  0, }},
+		.y = {{                         0,    2*near/(top-bot),                      0,  0, }},
+		.z = {{ (right+left)/(right-left), (top+bot)/(top-bot), -(far+near)/(far-near), -1, }},
+		.w = {{                         0,                   0, -2*far*near/(far-near),  0, }},
+	};
+}
+
+LLAL_INLINE double4x4 d4x4_perspective_vfov(double fov, double aspect_ratio, double far, double near) {
+	double t = tan(fov/2)*near;
+	double r = t*aspect_ratio;
+	return d4x4_perspective(r, -r, t, -t, far, near);
+}
+
+LLAL_INLINE double4x4 d4x4_perspective_hfov(double fov, double aspect_ratio, double far, double near) {
+	double r = tan(fov/2)*near;
+	double t = r/aspect_ratio;
+	return d4x4_perspective(r, -r, t, -t, far, near);
 }
 
 
