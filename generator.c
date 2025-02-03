@@ -124,7 +124,7 @@ const struct operator_info coalescers[COALESCERS_COUNT] = {
 	[COALESCER_MAX]		= {"clesce_max", ">"},
 };
 
-#define FUNC_MAX_ARITY 4
+#define FUNC_MAX_ARITY 6
 
 struct func_info {
 	char *name_fmt;
@@ -144,6 +144,8 @@ enum SpecFunc {
 	SPECFUNC_SCALE,
 	SPECFUNC_ROTATE,
 	SPECFUNC_TRANSLATE,
+	SPECFUNC_PERSPECTIVE,
+	SPECFUNC_PERSPECTIVE_FOV,
 	SPECFUNCS_COUNT,
 };
 
@@ -221,6 +223,36 @@ const struct func_info specfuncs[SPECFUNCS_COUNT] = {
 			[3] = false,
 			[4] = true,
 		},
+	},
+	[SPECFUNC_PERSPECTIVE] = {
+		.name_fmt = "%s_perspective",
+		.arity = 6,
+		.valid_datatypes = {
+			[DATATYPE_FLOAT]	= true,
+			[DATATYPE_DOUBLE]	= true,
+			[DATATYPE_INT]		= false,
+			[DATATYPE_UNSIGNED]	= false,
+		},
+		.valid_rows = {
+			[2] = false,
+			[3] = false,
+			[4] = true,
+		}
+	},
+	[SPECFUNC_PERSPECTIVE_FOV] = {
+		.name_fmt = "%s_perspective_%cfov",
+		.arity = 4,
+		.valid_datatypes = {
+			[DATATYPE_FLOAT]	= true,
+			[DATATYPE_DOUBLE]	= true,
+			[DATATYPE_INT]		= false,
+			[DATATYPE_UNSIGNED]	= false,
+		},
+		.valid_rows = {
+			[2] = false,
+			[3] = false,
+			[4] = true,
+		}
 	},
 };
 
@@ -852,6 +884,57 @@ void gen_func_matrix_translate(FILE *stream, enum DataType type, size_t rows, en
 	}
 }
 
+void gen_func_matrix_perspective(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass) {
+	if (specfuncs[SPECFUNC_PERSPECTIVE].valid_datatypes[type] == false) return;
+	if (specfuncs[SPECFUNC_PERSPECTIVE].valid_rows[rows] == false) return;
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	
+	PRE_FUNCSIG(stream)
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_PERSPECTIVE].name_fmt, mat_nickname);
+	fprintf(stream, "(%s %s, %s %s, %s %s, %s %s, %s %s, %s %s)",
+		types[type].name, "right", types[type].name, "left",
+		types[type].name, "top", types[type].name, "bot",
+		types[type].name, "far", types[type].name, "near");
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {\n\treturn (%s){"
+			"\n\t\t.x = {{       2*near/(right-left),                   0,                      0,  0, }},"
+			"\n\t\t.y = {{                         0,    2*near/(top-bot),                      0,  0, }},"
+			"\n\t\t.z = {{ (right+left)/(right-left), (top+bot)/(top-bot), -(far+near)/(far-near), -1, }},"
+			"\n\t\t.w = {{                         0,                   0, -2*far*near/(far-near),  0, }},"
+			"\n\t};"
+			"\n}\n\n",
+			mat_name);
+	}
+}
+
+void gen_func_matrix_perspective_fov(FILE *stream, enum DataType type, size_t rows, enum FuncGenPassType pass, bool horizontal) {
+	if (specfuncs[SPECFUNC_PERSPECTIVE_FOV].valid_datatypes[type] == false) return;
+	if (specfuncs[SPECFUNC_PERSPECTIVE_FOV].valid_rows[rows] == false) return;
+	GEN_MATNAME(mat_name, types[type].name, rows)
+	GEN_MATNAME(mat_nickname, types[type].nickname, rows)
+	
+	PRE_FUNCSIG(stream)
+	fprintf(stream, "%s ", mat_name);
+	fprintf(stream, specfuncs[SPECFUNC_PERSPECTIVE_FOV].name_fmt, mat_nickname, horizontal ? 'h' : 'v');
+	fprintf(stream, "(%s %s, %s %s, %s %s, %s %s)",
+		types[type].name, "fov", types[type].name, "aspect_ratio",
+		types[type].name, "far", types[type].name, "near");
+	END_FUNCDEF(stream)
+	if (pass == IMPLEMENTATION) {
+		fprintf(stream, " {");
+		fprintf(stream, "\n\t%s %c = tan%s(fov/2)*near;",
+			types[type].name, horizontal ? 'r' : 't', types[type].func_suffix);
+		fprintf(stream, "\n\t%s %c = %saspect_ratio;",
+			types[type].name, horizontal ? 't' : 'r', horizontal ? "r/" : "t*");
+		fprintf(stream, "\n\treturn ");
+		fprintf(stream, specfuncs[SPECFUNC_PERSPECTIVE].name_fmt, mat_nickname);
+		fprintf(stream, "(r, -r, t, -t, far, near);\n}\n\n");
+	}
+}
+
 int main(void) {
 	fprintf(stdout,
 		"#ifndef LLAL_H\n"
@@ -938,6 +1021,9 @@ int main(void) {
 				gen_func_matrix_scale(stdout, type, n, pass);
 				gen_func_matrix_rotate(stdout, type, n, pass);
 				gen_func_matrix_translate(stdout, type, n, pass);
+				gen_func_matrix_perspective(stdout, type, n, pass);
+				gen_func_matrix_perspective_fov(stdout, type, n, pass, false);
+				gen_func_matrix_perspective_fov(stdout, type, n, pass, true);
 			}
 		}
 #		ifdef GENERATE_SWIZZLING
